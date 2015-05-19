@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-drive\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="a0ce76dfaccbfbd6c551ed2174280aaabe60fe47">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-bcc15e86afe3cbee8177f72e28d51075d83eb9aa.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.1.1\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="e0b0c35d02308b270015a74cada4887e2e49b889">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-62aa6e66226d9a6e644b728a5cce6db67a3313f9.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.1.1\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="a3ff3c506644c820eb2bdf06e8339f72be578551">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-cd61e881c4c247ff1e9ee9bed4515d427823cfba.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="3988694bf9d8186ff97ad5cdfa4ed88b5010fe08">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-cf82cc57eb423948a6070b91e2bf1b5cb0d7bb59.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.1.1\support-annotations-22.1.1.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\support-annotations-22.1.1-d513078ce9974b71179ef3871712260855159bb0.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.2.2\d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b\jackson-core-2.2.2.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\jackson-core-2.2.2-dbfb73b74c6089697725d15bba014ee064a24586.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-cast\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="e5b9f5b0aa8dee788beb63d23832cb29ce771343">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-2faa6956278072faedb425cd58aacff95f132e6c.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-fitness\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="4f4fe3c23776540625f3c2844152a7510fddf9f1">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-daa44cc3fdd48d61ac0149865c8177d5e7cbd8be.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-maps\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="fe3e0c6de7cceed888b277487238b6af9a1cc299">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-f8d92b20cc03d34441347a100039924b83a86ac6.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-databind\2.2.2\3c8f6018eaa72d43b261181e801e6f8676c16ef6\jackson-databind-2.2.2.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="3c8f6018eaa72d43b261181e801e6f8676c16ef6">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\jackson-databind-2.2.2-e4cc065fce519c9e7d107f019a634ef7af81c371.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-identity\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="b48d5c51a9a9e329005106b4667f54948de4d4d8">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-cac28231d57148c62eec2acbab6c7ffd7e31b39f.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-annotations\2.2.2\285cb9c666f0f0f3dd8a1be04e1f457eb7b15113\jackson-annotations-2.2.2.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="285cb9c666f0f0f3dd8a1be04e1f457eb7b15113">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\jackson-annotations-2.2.2-d6698349758c63df3f786a497b2841d844547de6.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\.gradle\caches\modules-2\files-2.1\com.firebase\tubesock\0.0.11\d37cb67277928cf59344b4196af8d9cee1f1a27c\tubesock-0.0.11.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="d37cb67277928cf59344b4196af8d9cee1f1a27c">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\tubesock-0.0.11-3c3b7d10595fc2836979d38fa76de74468bf89b3.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-panorama\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="565a01f90f1529f73362707c4c185d0623a68782">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-be3be9538af65f3f8e674728095c7e4eeb802344.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-safetynet\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="0708ef60917bf94913fe9ef972a655b99462dca7">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-1c381797dd24e16374851acb2cc1b087392ebf5f.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appstate\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="0180d031a7b54dabb93b4af3869468b55dc938bd">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-f72fbbffab5b9a51a3a316d5d5b20d69fd1a618d.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-plus\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="59652857a825fff0de62166fca1bc9553cc01abb">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-d2f956c2b747c36336abf7560d2bcc7966a68c85.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.1\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-51d1cfb4a4aa8d5a644458cff0262a9b75ad418e.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-games\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="3b4ff5c39dace8f3b4ab4cab8191785547a0815f">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-1312910766cbb8ec222a13f77dcf92ca3c383c9a.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-nearby\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="5ea948d825957be6c4358c48422bee60eef2d487">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-13cef7d651a18b087d1ebcdeaa6f15c1fd0ce794.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appinvite\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="bb36004beb02b69562cbec9aa7d6a3cf16bf5d1b">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-066690b2b5b1fb936cbb92603d9f7933b9347f9b.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="f2f7ec211ce4d244ee97a57523eeb4526dc3cf8a">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-2623ddc748803bcf93287deea984069e46ab7466.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\libs\commons-lang3-3.4.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="5fe28b9518e58819180a43a850fbc0dd24b7c050">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\commons-lang3-3.4-0d8e108c6c1448aa4a0a63426b21828a80a44b35.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-wallet\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="6046e5cdaf799120b7c56a5a061d80e8854c4d34">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-716d453809f82c7188023284e647753f6944b8cf.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-analytics\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="9c9dea9e85aceb09d95df5e6f7bc8a43fc286068">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-397d46abc82f65c35dc0242dfb5efaeb9f18c9eb.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\.gradle\caches\modules-2\files-2.1\com.firebase\firebase-client-android\2.2.3\682d0a8dce58e47bde57316aac7d6bb5618dee6b\firebase-client-android-2.2.3.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="682d0a8dce58e47bde57316aac7d6bb5618dee6b">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\firebase-client-android-2.2.3-e5b3e71d61ed1f4038b6a4c62b91c75ba60aeee0.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-gcm\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="7215ac1f2fca947b9415a6ee2a1bf991364aab24">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-5fe36934b74a4f5a41c5e8fdd9c4f3b5185404eb.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-location\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="b2c07cdb814fe988ad05f7b4d767a841514a5991">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-4a8c15ea3bbaea2352fd3c5889863a344199bfcf.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.1\libs\internal_impl-22.1.1.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\internal_impl-22.1.1-bc3a85afaf3c7867fe23020ac542cddef997c7cb.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-wearable\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="e5bf453b070c1e39297986144960e45afa0fdfad">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-91ebb9b3f49d986401ee71870e40957bd114d487.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\22.1.1\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="22886d910315028a2b34b1ba068c265534ade87a">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-2de4fce36138d0a912f4062e0533723d27e4c448.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\.gradle\caches\modules-2\files-2.1\com.firebase\firebase-client-jvm\2.2.3\e787a02a644f2681e4af82cdc88dd2f69877692b\firebase-client-jvm-2.2.3.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="e787a02a644f2681e4af82cdc88dd2f69877692b">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\firebase-client-jvm-2.2.3-ef5b3fac8dba8ae0e7597396417d61db22cd7e2b.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appindexing\7.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="e35fae1b377c23aa5fd2d309a190c2d0f73d54ec">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-92911fd1552da7615d717d65eb63ba9307ce6ef0.jar" />
+    </item>
+
+</items>
