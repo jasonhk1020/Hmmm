@@ -24,12 +24,12 @@
         android:orderInCategory="3"
         android:menuCategory="secondary"/>
 
-    <item android:id="@+id/action_match_save"
+<!--    <item android:id="@+id/action_match_save"
         android:title="@string/action_match_save"
         android:icon="@drawable/ic_action_important"
         app:showAsAction="always"
         android:orderInCategory="4"
-        android:menuCategory="secondary"/>
+        android:menuCategory="secondary"/>-->
 
     <item android:id="@+id/action_match_settings"
         android:title="@string/action_settings"
