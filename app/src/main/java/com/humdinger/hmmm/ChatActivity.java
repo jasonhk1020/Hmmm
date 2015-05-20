@@ -18,6 +18,9 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ChatActivity extends MenuActivity {
 
     private EditText inputText;
@@ -73,8 +76,8 @@ public class ChatActivity extends MenuActivity {
         // look through the users connections dynamically
         mainRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("users").child(uid);
 
+        //traverse down into connections
         connectRef = mainRef.child("connections");
-
         connectRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -82,13 +85,12 @@ public class ChatActivity extends MenuActivity {
                 //if the connection is at a true state
                 if ((Boolean) dataSnapshot.getValue()) {
 
-
                     //get the match's firebase connections
                     matchRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("users").child(dataSnapshot.getKey());
                     matchRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            //username for later
+                            //username and id
                             matchUsername = dataSnapshot.child("username").getValue().toString();
                             matchUid = dataSnapshot.child("uid").getValue().toString();
                         }
@@ -99,26 +101,19 @@ public class ChatActivity extends MenuActivity {
                         }
                     });
 
-                    //get uid for later
-
-
-                    //traverse into the connection
+                    //traverse into the connection and look for matches
                     matchRef = matchRef.child("connections");
-                    //listen in on the match's profile
                     matchRef.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
                             //loop through match's connections
                             //if you are found and connection is at a true state
                             if (dataSnapshot.getKey().equals(uid) && (Boolean) dataSnapshot.getValue())  {
-
                                 //now check to see if both users are in a room under members just once
-                                Firebase memberRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("members");
+                                memberRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("members");
                                 memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-
                                         //logic to see if we need to assign a room number
                                         boolean newRoom = true;
 
@@ -143,6 +138,12 @@ public class ChatActivity extends MenuActivity {
                                         if (newRoom) {
                                             // let's setup a new room (just length of members rooms and + 1
                                             String room = String.valueOf(dataSnapshot.getChildrenCount() + 1);
+
+                                            //add the people and room number to the members child
+                                            Map<String, Object> members = new HashMap<String, Object>();
+                                            members.put(uid, true);
+                                            members.put(matchUid, true);
+                                            memberRef.child(room).setValue(members);
 
                                             // pass the user name and the room number both strings
                                             mConnectionListItem = new ConnectionListItem(matchUsername, room);
@@ -212,7 +213,6 @@ public class ChatActivity extends MenuActivity {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -233,7 +233,6 @@ public class ChatActivity extends MenuActivity {
             mRecyclerView.setVisibility(View.INVISIBLE);
         }
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
