@@ -50,7 +50,7 @@ public class MenuActivity extends ActionBarActivity {
                 return true;
             case R.id.action_forget:
                 intent = new Intent(this, LoginActivity.class);
-                this.setResult(RESULT_OK, intent);
+                this.setResult(RESULT_CANCELED, intent);
                 finish();
                 return true;
             default:

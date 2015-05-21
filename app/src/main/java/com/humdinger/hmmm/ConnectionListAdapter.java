@@ -89,6 +89,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                     }
                 });
 
+                //input text placeholder
                 inputText = (EditText) ((Activity)mContext).findViewById(R.id.messageInput);
                 inputText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override

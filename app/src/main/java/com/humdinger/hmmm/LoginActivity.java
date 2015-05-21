@@ -2,6 +2,7 @@ package com.humdinger.hmmm;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -50,6 +51,7 @@ public class LoginActivity extends ActionBarActivity implements
     private ConnectionResult mGoogleConnectionResult;
     private SignInButton mGoogleLoginButton;
     private ProgressDialog mAuthProgressDialog;
+    private Context mContext;
 
     //Firebase variables
     private Firebase mFirebaseRef;
@@ -71,12 +73,6 @@ public class LoginActivity extends ActionBarActivity implements
                 .addApi(Plus.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Plus.API, Plus.PlusOptions.builder().build())
-                .addScope(Plus.SCOPE_PLUS_LOGIN).build();
 
         //show the google sign in button
         mGoogleLoginButton = (SignInButton) findViewById(R.id.login_with_google);
@@ -104,6 +100,8 @@ public class LoginActivity extends ActionBarActivity implements
         mAuthProgressDialog.setTitle("Loading");
         mAuthProgressDialog.setCancelable(false);
         mAuthProgressDialog.show();
+
+        mContext = this;
 
         mFirebaseRef.addAuthStateListener(new Firebase.AuthStateListener() {
             @Override
@@ -160,38 +158,39 @@ public class LoginActivity extends ActionBarActivity implements
                 }
                 break;
             case RC_GOOGLE_LOGOUT:
-                if (resultCode != RESULT_OK) {
-                    mGoogleLoginClicked = true;
-                }
-                if(this.mAuthData != null) {
-                    mFirebaseRef.unauth();
-                    if (this.mAuthData.getProvider().equals("google")) {
-                        if (mGoogleApiClient.isConnected()) {
-                            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-                            mGoogleApiClient.disconnect();
-                            mGoogleApiClient.connect();
+                //just log out
+                if (resultCode == RESULT_OK) {
+                    if(this.mAuthData != null) {
+                        mFirebaseRef.unauth();
+                        if (this.mAuthData.getProvider().equals("google")) {
+                            if (mGoogleApiClient.isConnected()) {
+                                Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                                mGoogleApiClient.disconnect();
+                            }
                         }
                     }
-                }
-                break;
-            case RC_GOOGLE_FORGET:
-                if (resultCode != RESULT_OK) {
-                    mGoogleLoginClicked = true;
-                }
-                if(this.mAuthData != null) {
-                    mFirebaseRef.unauth();
-                    if (this.mAuthData.getProvider().equals("google")) {
-                        if (mGoogleApiClient.isConnected()) {
-                            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-                            Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient)
-                                    .setResultCallback(new ResultCallback<Status>() {
-                                        @Override
-                                        public void onResult(Status status) {
-                                        }
+                } else if (resultCode == RESULT_CANCELED) {
 
-                                    });
+                    //let's forget me
+                    if(this.mAuthData != null) {
+                        mFirebaseRef.unauth();
+                        if (this.mAuthData.getProvider().equals("google")) {
+                            if (mGoogleApiClient.isConnected()) {
+                                Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                                Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient)
+                                        .setResultCallback(new ResultCallback<Status>() {
+                                            @Override
+                                            public void onResult(Status status) {
+                                                Log.e(TAG, "User access revoked!");
+                                                mGoogleApiClient.disconnect(); //this might be redundant
+                                            }
+
+                                        });
+                            }
                         }
                     }
+                } else {
+                    mGoogleLoginClicked = true;
                 }
                 break;
         }
@@ -237,6 +236,7 @@ public class LoginActivity extends ActionBarActivity implements
                 if (token != null) {
                     /* Successfully got OAuth token, now login with Google */
                     mFirebaseRef.authWithOAuthToken("google", token, new AuthResultHandler("google"));
+                    token = null;
                 } else if (errorMessage != null) {
                     mAuthProgressDialog.hide();
                     showErrorDialog(errorMessage);
@@ -258,7 +258,7 @@ public class LoginActivity extends ActionBarActivity implements
         public void onAuthenticated(AuthData authData) {
             Log.i(TAG, provider + " auth successful");
             mAuthProgressDialog.hide();
-            setAuthenticatedUser(authData);
+            //setAuthenticatedUser(authData); //this is redundant
         }
 
         @Override
@@ -300,7 +300,7 @@ public class LoginActivity extends ActionBarActivity implements
                 mFirebaseRef.child("users").child(uid).updateChildren(map);
 
                 //go to matchactivity
-                Intent intent = new Intent(LoginActivity.this, MatchActivity.class);
+                Intent intent = new Intent(mContext, MatchActivity.class);
                 startActivityForResult(intent, RC_GOOGLE_LOGOUT);
             } else {
                 Log.e(TAG, "Invalid provider: " + authData.getProvider());

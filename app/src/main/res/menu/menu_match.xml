@@ -22,7 +22,9 @@
         android:icon="@drawable/ic_action_accept"
         app:showAsAction="always"
         android:orderInCategory="3"
-        android:menuCategory="secondary"/>
+        android:menuCategory="secondary">
+    </item>
+
 
 <!--    <item android:id="@+id/action_match_save"
         android:title="@string/action_match_save"

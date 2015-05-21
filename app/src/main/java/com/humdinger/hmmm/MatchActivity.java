@@ -3,8 +3,6 @@ package com.humdinger.hmmm;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -110,8 +108,6 @@ public class MatchActivity extends MenuActivity{
         //add match toolbar
         Toolbar matchToolbar = (Toolbar) findViewById(R.id.toolbar_match);
         matchToolbar.inflateMenu(R.menu.menu_match);
-        scaleImage(getResources().getDrawable(R.drawable.ic_action_accept), 2);
-        scaleImage(getResources().getDrawable(R.drawable.ic_action_cancel), 2);
         matchToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -234,25 +230,6 @@ public class MatchActivity extends MenuActivity{
             TextView descriptionView = (TextView) findViewById(R.id.match_description);
             descriptionView.setText("");
         }
-    }
-
-    public Drawable scaleImage(Drawable image, float scaleFactor) {
-
-        if ((image == null) || !(image instanceof BitmapDrawable)) {
-            return image;
-        }
-
-        Bitmap b = ((BitmapDrawable)image).getBitmap();
-
-        int sizeX = Math.round(image.getIntrinsicWidth() * scaleFactor);
-        int sizeY = Math.round(image.getIntrinsicHeight() * scaleFactor);
-
-        Bitmap bitmapResized = Bitmap.createScaledBitmap(b, sizeX, sizeY, false);
-
-        image = new BitmapDrawable(getResources(), bitmapResized);
-
-        return image;
-
     }
 
     private String removeNull(String string) {
