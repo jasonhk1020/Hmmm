@@ -154,6 +154,11 @@ public class MatchActivity extends MenuActivity{
         super.onStart();
     }
 
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
+
     private void skipMatch(String matchUid) {
         Map<String,Object> map = new HashMap<String,Object>();
         map.put(matchUid,false);

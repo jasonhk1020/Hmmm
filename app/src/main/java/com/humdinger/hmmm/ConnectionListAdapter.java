@@ -32,6 +32,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
     private EditText inputText;
     private ImageButton inputButton;
     private Firebase mFirebaseRef;
+    private Boolean mBoolean;
 
     public void addItem(ConnectionListItem item) {
         mConnectionListItems.add(0, item);
@@ -103,6 +104,13 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                     }
                 });
 
+                //add the connection name to chat toolbar
+                //((ChatActivity)mContext).getSupportActionBar().setDisplayShowTitleEnabled(true);
+                //((ChatActivity)mContext).setTitle(connectionListItem.getMatchUsername());
+
+                TextView mTitle = (TextView) ((Activity)mContext).findViewById(R.id.toolbar_title);
+                mTitle.setText(connectionListItem.getMatchUsername());
+
                 //if deselecting the keyboard
                 inputText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
@@ -114,6 +122,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                     }
                 });
 
+                //change the view of buttons
                 setInvisible(false);
             }
         });
@@ -130,7 +139,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
     @Override
     public void onBindViewHolder(ConnectionListAdapter.ViewHolder viewHolder, int i) {
         ConnectionListItem connectionListItem = mConnectionListItems.get(i);
-        viewHolder.setText(connectionListItem.getText());
+        viewHolder.setText(connectionListItem.getMatchUsername());
     }
 
     @Override
@@ -150,6 +159,8 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
             this.text.setText(text);
         }
     }
+
+
 
     private void setInvisible(boolean mBoolean) {
         if (mBoolean) {

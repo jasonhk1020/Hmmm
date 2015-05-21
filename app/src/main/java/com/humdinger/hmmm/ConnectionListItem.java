@@ -8,29 +8,29 @@ import java.util.Calendar;
  */
 public class ConnectionListItem implements Serializable{
     private Long id;
-    private String text;
+    private String matchUsername;
     private String status;
     private Calendar date;
     private String room;
 
-    public ConnectionListItem(String text, String room) {
-        this(null, text, "Open", Calendar.getInstance(), room);
+    public ConnectionListItem(String matchUsername, String room) {
+        this(null, matchUsername, "Open", Calendar.getInstance(), room);
     }
 
-    public ConnectionListItem(Long id, String text, String status, Calendar date, String room){
+    public ConnectionListItem(Long id, String matchUsername, String status, Calendar date, String room){
         setId(id);
-        setText(text);
+        setMatchUsername(matchUsername);
         setStatus(status);
         setDate(date);
         setRoom(room);
     }
 
-    public String getText() {
-        return text;
+    public String getMatchUsername() {
+        return matchUsername;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setMatchUsername(String matchUsername) {
+        this.matchUsername = matchUsername;
     }
 
     public String getStatus() {

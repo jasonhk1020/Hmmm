@@ -1,6 +1,7 @@
 package com.humdinger.hmmm;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -101,6 +102,13 @@ public class ProfileActivity extends MenuActivity {
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this,MatchActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void setEditText(final String field, final String initialValue, final int id) {

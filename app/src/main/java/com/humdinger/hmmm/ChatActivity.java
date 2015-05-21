@@ -44,6 +44,7 @@ public class ChatActivity extends MenuActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private ConnectionListAdapter mConnectionListAdapter;
     private ConnectionListItem mConnectionListItem;
+    private Boolean mBoolean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,7 +208,8 @@ public class ChatActivity extends MenuActivity {
         inputButton = (ImageButton) findViewById(R.id.sendButton);
 
         //deal with display visibility
-        setInvisible(true);
+        mBoolean = true;
+        setInvisible(mBoolean);
 
         //animate adding new item to view
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -237,5 +239,18 @@ public class ChatActivity extends MenuActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mBoolean) {
+            Intent intent = new Intent(this,ChatActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            mBoolean = true;
+            setInvisible(mBoolean);
+        }
+
     }
 }
