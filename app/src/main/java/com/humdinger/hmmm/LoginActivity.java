@@ -44,7 +44,6 @@ public class LoginActivity extends ActionBarActivity implements
     //Google Login
     public static final int RC_GOOGLE_LOGIN = 1;
     public static final int RC_GOOGLE_LOGOUT = 2;
-    public static final int RC_GOOGLE_FORGET = 3;
     public GoogleApiClient mGoogleApiClient;
     private boolean mGoogleIntentInProgress;
     private boolean mGoogleLoginClicked;
@@ -158,34 +157,33 @@ public class LoginActivity extends ActionBarActivity implements
                 }
                 break;
             case RC_GOOGLE_LOGOUT:
-                //just log out
+
                 if (resultCode == RESULT_OK) {
-                    if(this.mAuthData != null) {
+                    //logic to determine if we need to forget the user
+                    boolean forget = data.getBooleanExtra("forget", false);
+                    if (this.mAuthData != null) {
                         mFirebaseRef.unauth();
-                        if (this.mAuthData.getProvider().equals("google")) {
-                            if (mGoogleApiClient.isConnected()) {
-                                Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-                                mGoogleApiClient.disconnect();
-                            }
-                        }
-                    }
-                } else if (resultCode == RESULT_CANCELED) {
 
-                    //let's forget me
-                    if(this.mAuthData != null) {
-                        mFirebaseRef.unauth();
                         if (this.mAuthData.getProvider().equals("google")) {
-                            if (mGoogleApiClient.isConnected()) {
-                                Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-                                Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient)
-                                        .setResultCallback(new ResultCallback<Status>() {
-                                            @Override
-                                            public void onResult(Status status) {
-                                                Log.e(TAG, "User access revoked!");
-                                                mGoogleApiClient.disconnect(); //this might be redundant
-                                            }
 
-                                        });
+                            if (mGoogleApiClient.isConnected()) {
+
+                                if (!forget) {
+                                    //just logout
+                                    Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                                    mGoogleApiClient.disconnect();
+                                } else {
+                                    //logout and forget user
+                                    Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                                    Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient)
+                                            .setResultCallback(new ResultCallback<Status>() {
+                                                @Override
+                                                public void onResult(Status status) {
+                                                    Log.e(TAG, "User access revoked!");
+                                                    mGoogleApiClient.disconnect(); //this might be redundant
+                                                }
+                                            });
+                                }
                             }
                         }
                     }
@@ -258,7 +256,6 @@ public class LoginActivity extends ActionBarActivity implements
         public void onAuthenticated(AuthData authData) {
             Log.i(TAG, provider + " auth successful");
             mAuthProgressDialog.hide();
-            //setAuthenticatedUser(authData); //this is redundant
         }
 
         @Override

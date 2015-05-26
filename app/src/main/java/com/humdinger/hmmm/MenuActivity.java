@@ -30,27 +30,32 @@ public class MenuActivity extends ActionBarActivity {
         switch (id) {
             case R.id.action_logout:
                 intent = new Intent(this, LoginActivity.class);
-                this.setResult(RESULT_OK, intent);
+                intent.putExtra("forget",false);
+                setResult(RESULT_OK, intent);
                 finish();
                 return true;
             case R.id.action_match:
                 intent = new Intent(this, MatchActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                 startActivity(intent);
                 finish();
                 return true;
             case R.id.action_chat:
                 intent = new Intent(this, ChatActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                 startActivity(intent);
                 finish();
                 return true;
             case R.id.action_profile:
                 intent = new Intent(this, ProfileActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                 startActivity(intent);
                 finish();
                 return true;
             case R.id.action_forget:
                 intent = new Intent(this, LoginActivity.class);
-                this.setResult(RESULT_CANCELED, intent);
+                intent.putExtra("forget",true);
+                setResult(RESULT_OK, intent);
                 finish();
                 return true;
             default:

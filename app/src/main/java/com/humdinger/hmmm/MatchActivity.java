@@ -11,6 +11,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -91,6 +92,7 @@ public class MatchActivity extends MenuActivity{
                     }
                 }
 
+                //deal with the first view or match
                 if (!matchUidList.isEmpty()) {
                     populateView(matchUidList.get(counter));
                 } else {
@@ -142,6 +144,8 @@ public class MatchActivity extends MenuActivity{
                             Toast.makeText(MatchActivity.this,"There are no previous matches.",Toast.LENGTH_SHORT).show();
                         }
                         return true;
+                    case R.id.action_match_settings:
+                        Toast.makeText(MatchActivity.this,"The settings menu is currently disabled.  We'll add search and filtering capability soon.",Toast.LENGTH_SHORT).show();
                     default:
                         return true;
                 }
@@ -226,6 +230,7 @@ public class MatchActivity extends MenuActivity{
             //name
             TextView usernameView = (TextView) findViewById(R.id.match_username);
             usernameView.setText("You've browsed through all the matches!");
+            usernameView.setGravity(Gravity.CENTER);
 
             //write info to view
             TextView positionCompanyIndustryView = (TextView) findViewById(R.id.match_position_company_industry);

@@ -56,7 +56,6 @@ public class ChatActivity extends MenuActivity {
         mUsername = prefs.getString("username", null);
         uid = prefs.getString("uid", null);
 
-
         //add menu toolbar
         Toolbar menuToolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(menuToolbar);
@@ -74,12 +73,12 @@ public class ChatActivity extends MenuActivity {
         mConnectionListAdapter = new ConnectionListAdapter(this, mRecyclerView, mUsername);
         mRecyclerView.setAdapter(mConnectionListAdapter);
 
-        // look through the users connections dynamically
+        // look through the user's info
         mainRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("users").child(uid);
 
-        //traverse down into connections
+        //traverse down into user's connections
         connectRef = mainRef.child("connections");
-        connectRef.addChildEventListener(new ChildEventListener() {
+        connectRef.addChildEventListener(new ChildEventListener() { //listen for when the there is child activity
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 //loop through your connections
@@ -88,7 +87,7 @@ public class ChatActivity extends MenuActivity {
 
                     //get the match's firebase connections
                     matchRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("users").child(dataSnapshot.getKey());
-                    matchRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    matchRef.addListenerForSingleValueEvent(new ValueEventListener() { //take a quick look to see if the connection has accepted you
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             //username and id
@@ -102,7 +101,7 @@ public class ChatActivity extends MenuActivity {
                         }
                     });
 
-                    //traverse into the connection and look for matches
+                    //traverse into the connection and look for their matches
                     matchRef = matchRef.child("connections");
                     matchRef.addChildEventListener(new ChildEventListener() {
                         @Override

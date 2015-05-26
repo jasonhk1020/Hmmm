@@ -104,9 +104,6 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                     }
                 });
 
-                //add the connection name to chat toolbar
-                //((ChatActivity)mContext).getSupportActionBar().setDisplayShowTitleEnabled(true);
-                //((ChatActivity)mContext).setTitle(connectionListItem.getMatchUsername());
 
                 TextView mTitle = (TextView) ((Activity)mContext).findViewById(R.id.toolbar_title);
                 mTitle.setText(connectionListItem.getMatchUsername());
