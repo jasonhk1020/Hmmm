@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#F9A825</color>
+    <color name="logoColor">#FBC02D</color>
+    <color name="tabsScrollColor">#FBC02D</color>
+    <color name="colorAccent">#FFFFFF</color>
+    <color name="actionMenuTextColor">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="cardBackground">#FFF9C4</color>
+    <color name="titleColor">#FFFFFF</color>
+    <color name="textColorPrimary">#000000</color>
+    <color name="textColorSecondary">#000000</color>
+</resources>

@@ -12,11 +12,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <activity
-            android:name=".MatchActivity"
-            android:label="@string/title_activity_match"
-            android:screenOrientation="portrait" >
-        </activity>
+
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name"
@@ -26,41 +22,49 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait" >
+        </activity>
+
+
+        <activity
+            android:name=".MatchActivity"
+            android:label="@string/title_activity_match"
+            android:screenOrientation="portrait" >
+        </activity>
+
         <activity
             android:name=".SearchActivity"
             android:label="@string/title_activity_search"
             android:screenOrientation="portrait" >
         </activity>
+
         <activity
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile"
             android:screenOrientation="portrait" >
         </activity>
-        <activity
-            android:name=".SearchSettingsActivity"
-            android:label="@string/title_activity_search_settings"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".AppSettingsActivity"
-            android:label="@string/title_activity_app_settings"
-            android:screenOrientation="portrait" >
-        </activity>
+
         <activity
             android:name=".ChatActivity"
             android:label="@string/title_activity_chat"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+
+        <activity
+            android:name=".MenuActivity"
+            android:label="@string/title_activity_menu" >
         </activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity
-            android:name=".MenuActivity"
-            android:label="@string/title_activity_menu" >
-        </activity>
+
     </application>
 
 </manifest>

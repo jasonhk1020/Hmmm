@@ -296,8 +296,8 @@ public class LoginActivity extends ActionBarActivity implements
                 //save data to firebase users
                 mFirebaseRef.child("users").child(uid).updateChildren(map);
 
-                //go to matchactivity
-                Intent intent = new Intent(mContext, MatchActivity.class);
+                //go to main activity
+                Intent intent = new Intent(mContext, MainActivity.class);
                 startActivityForResult(intent, RC_GOOGLE_LOGOUT);
             } else {
                 Log.e(TAG, "Invalid provider: " + authData.getProvider());

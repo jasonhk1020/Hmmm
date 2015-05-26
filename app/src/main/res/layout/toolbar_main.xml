@@ -7,8 +7,7 @@
     android:layout_gravity="center"
     android:layout_centerHorizontal="true"
     android:visibility="visible"
-    android:background="@drawable/rounded_corner_large"
-    android:theme="@style/MyToolbar">
+    android:background="@drawable/rounded_corner_large">
 
     <TextView
         android:layout_width="match_parent"
