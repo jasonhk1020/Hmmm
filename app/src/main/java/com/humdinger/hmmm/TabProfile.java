@@ -39,8 +39,6 @@ public class TabProfile extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View v =inflater.inflate(R.layout.tab_profile,container,false);
 
-
-
         //get uid to locate user information on firebase
         final SharedPreferences prefs = this.getActivity().getSharedPreferences("userPrefs", 0);
         String uid = prefs.getString("uid", null);

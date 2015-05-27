@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -62,7 +61,7 @@ public class TabChat extends Fragment {
         mUsername = prefs.getString("username", null);
         uid = prefs.getString("uid", null);
 
-// establish recycler view
+        // establish recycler view
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
         mLayoutManager = new LinearLayoutManager(this.getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -74,125 +73,83 @@ public class TabChat extends Fragment {
         mConnectionListAdapter = new ConnectionListAdapter(this.getActivity(), mRecyclerView, mUsername);
         mRecyclerView.setAdapter(mConnectionListAdapter);
 
-        // look through the user's info
-        mainRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("users").child(uid);
-
-        //traverse down into user's connections
-        connectRef = mainRef.child("connections");
-        connectRef.addChildEventListener(new ChildEventListener() { //listen for when the there is child activity
+        //get snapshot of everything!
+        Firebase ref = new Firebase(getResources().getString(R.string.FIREBASE_URL));
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                //loop through your connections
-                //if the connection is at a true state
-                if ((Boolean) dataSnapshot.getValue()) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //now go loop through your connections
+                for (DataSnapshot child : dataSnapshot.child("users").child(uid).child("connections").getChildren()) {
 
-                    //get the match's firebase connections
-                    matchRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("users").child(dataSnapshot.getKey());
-                    matchRef.addListenerForSingleValueEvent(new ValueEventListener() { //take a quick look to see if the connection has accepted you
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            //username and id
-                            matchUsername = dataSnapshot.child("username").getValue().toString();
-                            matchUid = dataSnapshot.child("uid").getValue().toString();
-                        }
+                    //set up the potential match's name and room number
+                    String matchUsername = dataSnapshot.child("users").child(child.getKey()).child("username").getValue().toString();
+                    String roomId = null;
 
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
 
-                        }
-                    });
+                    //if connection is true
+                    if ((Boolean) child.getValue()) {
 
-                    //traverse into the connection and look for their matches
-                    matchRef = matchRef.child("connections");
-                    matchRef.addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            //loop through match's connections
-                            //if you are found and connection is at a true state
-                            if (dataSnapshot.getKey().equals(uid) && (Boolean) dataSnapshot.getValue())  {
-                                //now check to see if both users are in a room under members just once
-                                memberRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("members");
-                                memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        //logic to see if we need to assign a room number
-                                        boolean newRoom = true;
+                        //let's assume you exist in their connections
+                        DataSnapshot you = dataSnapshot.child("users").child(child.getKey()).child("connections").child(uid);
 
-                                        //loop through each member room
-                                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        //check if you exist
+                        if (you.exists()) {
 
-                                            // determine if we already have a room for the two of you
-                                            if (child.hasChild(uid) && child.hasChild(matchUid)){
+                            //and make sure it's true
+                            if ((Boolean) you.getValue()) {
 
-                                                // this is great, we already have a room so let's just use that.  pass the user name and the room number both strings
-                                                mConnectionListItem = new ConnectionListItem(matchUsername, child.getKey());
+                                //refresh new room status for every new successful match
+                                boolean newRoom = true;
 
-                                                // Add the item to the adapter
-                                                mConnectionListAdapter.addItem(mConnectionListItem);
+                                //then check to see if you have a room together by looping through each member room
+                                for (DataSnapshot mChild : dataSnapshot.child("members").getChildren()) {
 
-                                                //since we have a room, we don't need to specify a new one
-                                                newRoom = false;
-                                            }
-                                        }
+                                    //check to see if they and you are in there
+                                    if(mChild.hasChild(child.getKey()) && mChild.hasChild(uid)) {
 
-                                        // assign a new room?
-                                        if (newRoom) {
-                                            // let's setup a new room (just length of members rooms and + 1
-                                            String room = String.valueOf(dataSnapshot.getChildrenCount() + 1);
+                                        //check to see if both are true
+                                        if((Boolean) mChild.child(child.getKey()).getValue() && (Boolean) mChild.child(uid).getValue()) {
 
-                                            //add the people and room number to the members child
-                                            Map<String, Object> members = new HashMap<String, Object>();
-                                            members.put(uid, true);
-                                            members.put(matchUid, true);
-                                            memberRef.child(room).setValue(members);
+                                            //assign matches name and room number
+                                            roomId = mChild.getKey();
 
-                                            // pass the user name and the room number both strings
-                                            mConnectionListItem = new ConnectionListItem(matchUsername, room);
+                                            //create new list item based off username and uid
+                                            mConnectionListItem = new ConnectionListItem(matchUsername, roomId);
 
                                             // Add the item to the adapter
                                             mConnectionListAdapter.addItem(mConnectionListItem);
+
+                                            //don't need a new room, we already assigned!
+                                            newRoom = false;
+
                                         }
                                     }
 
-                                    @Override
-                                    public void onCancelled(FirebaseError firebaseError) {
-                                    }
-                                });
+                                }
+
+                                //we need a new room
+                                if (newRoom) {
+
+                                    // let's assign a new room number (just length of members rooms + 1)
+                                    roomId = String.valueOf(dataSnapshot.child("members").getChildrenCount() + 1);
+
+                                    //add the people and room number to the members child
+                                    Map<String, Object> members = new HashMap<String, Object>();
+                                    members.put(uid, true);
+                                    members.put(matchUid, true);
+                                    memberRef.child(roomId).setValue(members);
+
+                                    // pass the user name and the room number both strings
+                                    mConnectionListItem = new ConnectionListItem(matchUsername, roomId);
+
+                                    // Add the item to the adapter
+                                    mConnectionListAdapter.addItem(mConnectionListItem);
+
+                                }
                             }
                         }
-
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                        }
-
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-                        }
-
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                        }
-
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-                        }
-                    });
+                    }
                 }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override

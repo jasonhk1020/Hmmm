@@ -157,8 +157,6 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
         }
     }
 
-
-
     private void setInvisible(boolean mBoolean) {
         if (mBoolean) {
             //show the connections list
