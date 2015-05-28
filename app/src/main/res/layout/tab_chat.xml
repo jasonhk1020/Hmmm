@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
@@ -19,10 +18,10 @@
         android:singleLine="true"
         android:id="@+id/chat_matchUsername"
         android:gravity="center"
-        android:textColor="@color/highlightColor"
+        android:textColor="@color/colorAccent"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:background="@color/colorPrimary"/>
+        android:background="@color/toolbarColor"/>
 
     <ListView
         android:visibility="visible"

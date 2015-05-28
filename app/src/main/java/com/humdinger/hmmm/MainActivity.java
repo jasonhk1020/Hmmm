@@ -3,7 +3,6 @@ package com.humdinger.hmmm;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -11,7 +10,6 @@ import android.view.MenuItem;
 public class MainActivity extends ActionBarActivity implements BackHandledFragment.BackHandlerInterface {
 
     // Declaring Your View and Variables
-    Toolbar toolbar;
     CustomViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
@@ -25,11 +23,6 @@ public class MainActivity extends ActionBarActivity implements BackHandledFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Creating The Toolbar and setting it as the Toolbar for the activity
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().hide();
 
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles for the Tabs and Number Of Tabs.
         adapter =  new ViewPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
