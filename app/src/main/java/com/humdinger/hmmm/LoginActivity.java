@@ -181,6 +181,7 @@ public class LoginActivity extends ActionBarActivity implements
                                                 public void onResult(Status status) {
                                                     Log.e(TAG, "User access revoked!");
                                                     mGoogleApiClient.disconnect(); //this might be redundant
+                                                    mAuthProgressDialog.show();
                                                 }
                                             });
                                 }
@@ -299,7 +300,7 @@ public class LoginActivity extends ActionBarActivity implements
                 //go to main activity
                 Intent intent = new Intent(mContext, MainActivity.class);
                 startActivityForResult(intent, RC_GOOGLE_LOGOUT);
-                //finish();
+
             } else {
                 Log.e(TAG, "Invalid provider: " + authData.getProvider());
             }

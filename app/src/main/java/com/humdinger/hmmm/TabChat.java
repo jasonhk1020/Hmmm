@@ -84,69 +84,72 @@ public class TabChat extends Fragment {
                 for (DataSnapshot child : dataSnapshot.child("users").child(uid).child("connections").getChildren()) {
 
                     //set up the potential match's name and room number
-                    String matchUsername = dataSnapshot.child("users").child(child.getKey()).child("username").getValue().toString();
-                    String roomId = null;
+                    if (dataSnapshot.child("users").child(child.getKey()).child("username").exists()) {
+                        String matchUsername = dataSnapshot.child("users").child(child.getKey()).child("username").getValue().toString();
+                        String roomId = null;
 
 
-                    //if connection is true
-                    if ((Boolean) child.getValue()) {
+                        //if connection is true
+                        if ((Boolean) child.getValue()) {
 
-                        //let's assume you exist in their connections
-                        DataSnapshot you = dataSnapshot.child("users").child(child.getKey()).child("connections").child(uid);
+                            //let's assume you exist in their connections
+                            DataSnapshot you = dataSnapshot.child("users").child(child.getKey()).child("connections").child(uid);
 
-                        //check if you exist
-                        if (you.exists()) {
+                            //check if you exist
+                            if (you.exists()) {
 
-                            //and make sure it's true
-                            if ((Boolean) you.getValue()) {
+                                //and make sure it's true
+                                if ((Boolean) you.getValue()) {
 
-                                //refresh new room status for every new successful match
-                                boolean newRoom = true;
+                                    //refresh new room status for every new successful match
+                                    boolean newRoom = true;
 
-                                //then check to see if you have a room together by looping through each member room
-                                for (DataSnapshot mChild : dataSnapshot.child("members").getChildren()) {
+                                    //then check to see if you have a room together by looping through each member room
+                                    for (DataSnapshot mChild : dataSnapshot.child("members").getChildren()) {
 
-                                    //check to see if they and you are in there
-                                    if(mChild.hasChild(child.getKey()) && mChild.hasChild(uid)) {
+                                        //check to see if they and you are in there
+                                        if (mChild.hasChild(child.getKey()) && mChild.hasChild(uid)) {
 
-                                        //check to see if both are true
-                                        if((Boolean) mChild.child(child.getKey()).getValue() && (Boolean) mChild.child(uid).getValue()) {
+                                            //check to see if both are true
+                                            if ((Boolean) mChild.child(child.getKey()).getValue() && (Boolean) mChild.child(uid).getValue()) {
 
-                                            //assign matches name and room number
-                                            roomId = mChild.getKey();
+                                                //assign matches name and room number
+                                                roomId = mChild.getKey();
 
-                                            //create new list item based off username and uid
-                                            mConnectionListItem = new ConnectionListItem(matchUsername, roomId);
+                                                //create new list item based off username and uid
+                                                mConnectionListItem = new ConnectionListItem(matchUsername, roomId);
 
-                                            // Add the item to the adapter
-                                            mConnectionListAdapter.addItem(mConnectionListItem);
+                                                // Add the item to the adapter
+                                                mConnectionListAdapter.addItem(mConnectionListItem);
 
-                                            //don't need a new room, we already assigned!
-                                            newRoom = false;
+                                                //don't need a new room, we already assigned!
+                                                newRoom = false;
 
+                                            }
                                         }
+
                                     }
 
-                                }
+                                    //we need a new room
+                                    if (newRoom) {
 
-                                //we need a new room
-                                if (newRoom) {
+                                        // let's assign a new room number (just length of members rooms + 1)
+                                        roomId = String.valueOf(dataSnapshot.child("members").getChildrenCount() + 1);
 
-                                    // let's assign a new room number (just length of members rooms + 1)
-                                    roomId = String.valueOf(dataSnapshot.child("members").getChildrenCount() + 1);
+                                        //add the people and room number to the members child
+                                        Map<String, Object> members = new HashMap<String, Object>();
+                                        members.put(uid, true);
+                                        members.put(child.getKey(), true);
+                                        memberRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("members");
+                                        memberRef.child(roomId).setValue(members);
 
-                                    //add the people and room number to the members child
-                                    Map<String, Object> members = new HashMap<String, Object>();
-                                    members.put(uid, true);
-                                    members.put(matchUid, true);
-                                    memberRef.child(roomId).setValue(members);
+                                        // pass the user name and the room number both strings
+                                        mConnectionListItem = new ConnectionListItem(matchUsername, roomId);
 
-                                    // pass the user name and the room number both strings
-                                    mConnectionListItem = new ConnectionListItem(matchUsername, roomId);
+                                        // Add the item to the adapter
+                                        mConnectionListAdapter.addItem(mConnectionListItem);
 
-                                    // Add the item to the adapter
-                                    mConnectionListAdapter.addItem(mConnectionListItem);
-
+                                    }
                                 }
                             }
                         }
