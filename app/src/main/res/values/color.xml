@@ -3,6 +3,7 @@
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#F9A825</color>
     <color name="logoColor">#FBC02D</color>
+    <color name="highlightColor">#FBC02D</color>
     <color name="tabsScrollColor">#FBC02D</color>
     <color name="colorAccent">#FFFFFF</color>
     <color name="actionMenuTextColor">#FFFFFF</color>

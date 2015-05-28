@@ -1,6 +1,7 @@
 package com.humdinger.hmmm;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -86,6 +88,27 @@ public class TabProfile extends Fragment {
             }
         });
 
+        Button logoutButton = (Button) v.findViewById(R.id.logout_button);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.putExtra("forget",false);
+                getActivity().setResult(getActivity().RESULT_OK, intent);
+                getActivity().finish();
+            }
+        });
+
+        Button forgetButton = (Button) v.findViewById(R.id.forget_button);
+        forgetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.putExtra("forget",true);
+                getActivity().setResult(getActivity().RESULT_OK, intent);
+                getActivity().finish();
+            }
+        });
 
 
         return v;

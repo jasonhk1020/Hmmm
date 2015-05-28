@@ -1,6 +1,5 @@
 package com.humdinger.hmmm;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -12,7 +11,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     CharSequence Titles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapter is created
     int NumbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
-    private Context mContext;
+    int position;
 
     // Build a Constructor and assign the passed Values to appropriate values in the class
     public ViewPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb) {
@@ -41,7 +40,6 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             TabProfile tabProfile = new TabProfile();
             return tabProfile;
         }
-
     }
 
     // This method return the titles for the Tabs in the Tab Strip
@@ -57,4 +55,9 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return NumbOfTabs;
     }
+
+    public int getPosition() {
+        return position;
+    }
+
 }

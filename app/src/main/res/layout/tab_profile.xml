@@ -95,5 +95,23 @@
         android:maxLength="150"
         android:inputType="textCapSentences|textMultiLine"/>
 
+    <Button
+        android:id="@+id/logout_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/action_logout"
+        android:layout_above="@+id/forget_button"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+
+    <Button
+        android:id="@+id/forget_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/action_forget"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
 </RelativeLayout>

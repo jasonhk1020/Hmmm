@@ -9,8 +9,7 @@
         android:id="@+id/tool_bar"
         layout="@layout/tool_bar"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        />
+        android:layout_width="match_parent"/>
 
     <com.humdinger.hmmm.SlidingTabLayout
         android:id="@+id/tabs"
@@ -19,14 +18,10 @@
         android:elevation="0dp"
         android:background="@color/colorPrimary"/>
 
-    <android.support.v4.view.ViewPager
+    <com.humdinger.hmmm.CustomViewPager
         android:id="@+id/pager"
-
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        >
-
-    </android.support.v4.view.ViewPager>
+        android:layout_weight="1"/>
 
 </LinearLayout> 

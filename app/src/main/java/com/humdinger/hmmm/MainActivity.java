@@ -2,7 +2,6 @@ package com.humdinger.hmmm;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -13,7 +12,7 @@ public class MainActivity extends ActionBarActivity {
 
     // Declaring Your View and Variables
     Toolbar toolbar;
-    ViewPager pager;
+    CustomViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
     CharSequence Titles[]={"Hmmm...","Chat","Profile"};
@@ -34,8 +33,8 @@ public class MainActivity extends ActionBarActivity {
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles for the Tabs and Number Of Tabs.
         adapter =  new ViewPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
 
-        // Assigning ViewPager View and setting the adapter
-        pager = (ViewPager) findViewById(R.id.pager);
+        // Assigning ViewPager View and setting the adapter (custom to prevent swiping)
+        pager = (CustomViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
 
         // Assiging the Sliding Tab Layout View
@@ -53,6 +52,9 @@ public class MainActivity extends ActionBarActivity {
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
 
+        //get current page
+
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -63,18 +65,26 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-/*        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }*/
-
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+
+        switch(pager.getCurrentItem()) {
+            case 0:
+                finish();
+                break;
+            case 1:
+                pager.setCurrentItem(0);
+                break;
+            case 2:
+                pager.setCurrentItem(0);
+                break;
+        }
+    }
+
 
 
 }

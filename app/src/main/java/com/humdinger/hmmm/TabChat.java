@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -38,6 +39,7 @@ public class TabChat extends Fragment {
     private String uid;
     private String matchUsername;
     private String matchUid;
+    private TextView matchText;
 
     private Firebase mainRef;
     private Firebase connectRef;
@@ -164,6 +166,9 @@ public class TabChat extends Fragment {
         //button placeholder
         inputButton = (ImageButton) v.findViewById(R.id.sendButton);
 
+        //usertext placeholder
+        matchText = (TextView) v.findViewById(R.id.chat_matchUsername);
+
         //deal with display visibility
         mBoolean = true;
         setInvisible(mBoolean);
@@ -180,12 +185,14 @@ public class TabChat extends Fragment {
             chatView.setVisibility(View.INVISIBLE);
             inputText.setVisibility(View.INVISIBLE);
             inputButton.setVisibility(View.INVISIBLE);
+            matchText.setVisibility(View.INVISIBLE);
             mRecyclerView.setVisibility(View.VISIBLE);
         } else {
             //show the message dialog
             chatView.setVisibility(View.VISIBLE);
             inputText.setVisibility(View.VISIBLE);
             inputButton.setVisibility(View.VISIBLE);
+            matchText.setVisibility(View.VISIBLE);
             mRecyclerView.setVisibility(View.INVISIBLE);
         }
     }

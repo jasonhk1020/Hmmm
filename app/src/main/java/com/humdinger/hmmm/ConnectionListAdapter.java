@@ -33,6 +33,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
     private ImageButton inputButton;
     private Firebase mFirebaseRef;
     private Boolean mBoolean;
+    private TextView matchText;
 
     public void addItem(ConnectionListItem item) {
         mConnectionListItems.add(0, item);
@@ -105,8 +106,8 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                 });
 
 
-                TextView mTitle = (TextView) ((Activity)mContext).findViewById(R.id.toolbar_title);
-                mTitle.setText(connectionListItem.getMatchUsername());
+                matchText = (TextView) ((Activity)mContext).findViewById(R.id.chat_matchUsername);
+                matchText.setText(connectionListItem.getMatchUsername());
 
                 //if deselecting the keyboard
                 inputText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -163,12 +164,14 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
             chatView.setVisibility(View.INVISIBLE);
             inputText.setVisibility(View.INVISIBLE);
             inputButton.setVisibility(View.INVISIBLE);
+            matchText.setVisibility(View.INVISIBLE);
             mRecyclerView.setVisibility(View.VISIBLE);
         } else {
             //show the message dialog
             chatView.setVisibility(View.VISIBLE);
             inputText.setVisibility(View.VISIBLE);
             inputButton.setVisibility(View.VISIBLE);
+            matchText.setVisibility(View.VISIBLE);
             mRecyclerView.setVisibility(View.INVISIBLE);
         }
     }
