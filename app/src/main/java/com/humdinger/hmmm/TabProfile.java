@@ -1,6 +1,7 @@
 package com.humdinger.hmmm;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,7 +44,7 @@ public class TabProfile extends Fragment {
         final View v =inflater.inflate(R.layout.tab_profile,container,false);
 
         //get uid to locate user information on firebase
-        final SharedPreferences prefs = this.getActivity().getSharedPreferences("userPrefs", 0);
+        prefs = this.getActivity().getSharedPreferences("userPrefs", 0);
         String uid = prefs.getString("uid", null);
 
         //connect to user firebase
@@ -117,7 +119,7 @@ public class TabProfile extends Fragment {
         final EditText editText = (EditText) v.findViewById(id);
         editText.setText(initialValue, TextView.BufferType.EDITABLE);
         if (!initialValue.equals("")) {
-            editText.setBackgroundColor(getResources().getColor(R.color.transparent));
+            editText.setBackground(getResources().getDrawable(R.drawable.edittext_shadow));
         }
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -129,12 +131,12 @@ public class TabProfile extends Fragment {
                     map.put(field, updatedValue);
                     mFirebaseRef.updateChildren(map);
                     if (updatedValue.equals("")) {
-                        editText.setBackgroundColor(getResources().getColor(R.color.cardBackground));
+                        editText.setBackground(getResources().getDrawable(R.drawable.edittext_yellow));
                     } else {
-                        editText.setBackgroundColor(getResources().getColor(R.color.transparent));
+                        editText.setBackground(getResources().getDrawable(R.drawable.edittext_shadow));
                     }
-                    /*InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);*/
+                    InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
             }
         });

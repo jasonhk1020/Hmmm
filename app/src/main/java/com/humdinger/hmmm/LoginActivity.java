@@ -300,6 +300,7 @@ public class LoginActivity extends ActionBarActivity implements
                 //go to main activity
                 Intent intent = new Intent(mContext, MainActivity.class);
                 startActivityForResult(intent, RC_GOOGLE_LOGOUT);
+                //moveTaskToBack(true);
 
             } else {
                 Log.e(TAG, "Invalid provider: " + authData.getProvider());

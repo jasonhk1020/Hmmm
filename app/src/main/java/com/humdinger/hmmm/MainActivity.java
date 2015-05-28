@@ -8,7 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements BackHandledFragment.BackHandlerInterface {
 
     // Declaring Your View and Variables
     Toolbar toolbar;
@@ -19,6 +19,7 @@ public class MainActivity extends ActionBarActivity {
     int Numboftabs =3;
     private SharedPreferences prefs;
     public String uid;
+    private BackHandledFragment selectedFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,19 +73,24 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onBackPressed() {
 
-        switch(pager.getCurrentItem()) {
-            case 0:
-                finish();
-                break;
-            case 1:
+        //determine if you want the mainactivity to deal with back presses
+        if(selectedFragment == null || !selectedFragment.onBackPressed()) {
+
+            //yes please main activity, deal with back press for me!
+            if (pager.getCurrentItem() == 0) {
+                //were are inside our home base "match tab", so let's act like we hit the home button and just hide the app
+                moveTaskToBack(true);
+            } else {
+                //since we are either in the chat or profile tab let's go to match tab
                 pager.setCurrentItem(0);
-                break;
-            case 2:
-                pager.setCurrentItem(0);
-                break;
+            }
+
         }
     }
 
 
-
+    @Override
+    public void setSelectedFragment(BackHandledFragment selectedFragment) {
+        this.selectedFragment = selectedFragment;
+    }
 }

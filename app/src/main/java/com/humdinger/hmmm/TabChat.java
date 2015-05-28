@@ -4,7 +4,6 @@ package com.humdinger.hmmm;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,12 +14,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +27,7 @@ import java.util.Map;
  * Created by jasonhk1020 on 5/26/2015.
  */
 
-public class TabChat extends Fragment {
+public class TabChat extends BackHandledFragment {
 
     private EditText inputText;
     private ImageButton inputButton;
@@ -41,11 +40,6 @@ public class TabChat extends Fragment {
     private String matchUid;
     private TextView matchText;
 
-    private Firebase mainRef;
-    private Firebase connectRef;
-    private Firebase matchRef;
-    private Firebase mFirebaseRef;
-    private Firebase userRef;
     private Firebase memberRef;
 
     private RecyclerView mRecyclerView;
@@ -59,7 +53,7 @@ public class TabChat extends Fragment {
         View v =inflater.inflate(R.layout.tab_chat,container,false);
 
         //get user info
-        SharedPreferences prefs = this.getActivity().getSharedPreferences("userPrefs", 0);
+        SharedPreferences prefs = getActivity().getSharedPreferences("userPrefs", 0);
         mUsername = prefs.getString("username", null);
         uid = prefs.getString("uid", null);
 
@@ -116,15 +110,31 @@ public class TabChat extends Fragment {
                                                 //assign matches name and room number
                                                 roomId = mChild.getKey();
 
-                                                //create new list item based off username and uid
-                                                mConnectionListItem = new ConnectionListItem(matchUsername, roomId);
+                                                //if roomid is not in the list then add it
+                                                ArrayList<ConnectionListItem> arrayList = mConnectionListAdapter.getList();
 
-                                                // Add the item to the adapter
-                                                mConnectionListAdapter.addItem(mConnectionListItem);
+                                                //deal with refreshes in the firebase, make sure that if we already have the recyclerview item not to create another one
+                                                boolean newItem = true;
+                                                for (ConnectionListItem i : arrayList) {
 
-                                                //don't need a new room, we already assigned!
+                                                    //check by roomid
+                                                    if (i.getRoom().equals(roomId)) {
+                                                        newItem = false;
+                                                    }
+                                                }
+
+                                                //check if the item is already in the recyclerview, if it's new then go ahead and create a new item
+                                                if (newItem) {
+
+                                                    //create new list item based off username and uid
+                                                    mConnectionListItem = new ConnectionListItem(matchUsername, roomId);
+
+                                                    // Add the item to the adapter
+                                                    mConnectionListAdapter.addItem(mConnectionListItem);
+
+                                                }
+                                                //don't need a new room, we already have one
                                                 newRoom = false;
-
                                             }
                                         }
 
@@ -197,6 +207,22 @@ public class TabChat extends Fragment {
             inputButton.setVisibility(View.VISIBLE);
             matchText.setVisibility(View.VISIBLE);
             mRecyclerView.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public String getTagText() {
+        return null;
+    }
+
+    @Override
+    public boolean onBackPressed(){
+        if(chatView.getVisibility() == View.INVISIBLE) {
+            // go back to the the match activity by letting activity handle it
+            return false;
+        } else {
+            setInvisible(true); //now show the match list display
+            return true;
         }
     }
 }

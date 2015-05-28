@@ -34,7 +34,9 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         android:transcriptMode="alwaysScroll"
         android:divider="@null"
-        android:dividerHeight="0dp"/>
+        android:dividerHeight="0dp"
+        android:focusableInTouchMode="true"
+        android:clickable="true"/>
 
     <EditText
         android:visibility="visible"

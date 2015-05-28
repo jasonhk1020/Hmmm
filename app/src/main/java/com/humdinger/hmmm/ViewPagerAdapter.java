@@ -14,11 +14,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     int position;
 
     // Build a Constructor and assign the passed Values to appropriate values in the class
-    public ViewPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb) {
+    public ViewPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabs) {
         super(fm);
 
         this.Titles = mTitles;
-        this.NumbOfTabs = mNumbOfTabsumb;
+        this.NumbOfTabs = mNumbOfTabs;
     }
 
     //This method return the fragment for the every position in the View Pager

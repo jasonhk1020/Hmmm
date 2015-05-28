@@ -45,6 +45,10 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
         notifyItemRemoved(position);
     }
 
+    public ArrayList<ConnectionListItem> getList() {
+        return mConnectionListItems;
+    }
+
     public ConnectionListAdapter(Context context, RecyclerView recyclerView, String mUsername) {
         this.mContext = context;
         this.mRecyclerView = recyclerView;
@@ -106,6 +110,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                 });
 
 
+                //set the username of the connection
                 matchText = (TextView) ((Activity)mContext).findViewById(R.id.chat_matchUsername);
                 matchText.setText(connectionListItem.getMatchUsername());
 
@@ -121,7 +126,11 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                 });
 
                 //change the view of buttons
+                mBoolean = false;
                 setInvisible(false);
+
+                //
+
             }
         });
 
@@ -138,6 +147,8 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
     public void onBindViewHolder(ConnectionListAdapter.ViewHolder viewHolder, int i) {
         ConnectionListItem connectionListItem = mConnectionListItems.get(i);
         viewHolder.setText(connectionListItem.getMatchUsername());
+
+
     }
 
     @Override
@@ -150,7 +161,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
 
         public ViewHolder(View itemView) {
             super(itemView);
-            text = (TextView) itemView.findViewById(R.id.text);
+            text = (TextView) itemView.findViewById(R.id.text_connection);
         }
 
         public void setText(String text) {
