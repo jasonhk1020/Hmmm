@@ -83,7 +83,12 @@ public class TabChat extends BackHandledFragment {
 
                     //set up the potential match's name and room number
                     if (dataSnapshot.child("users").child(child.getKey()).child("username").exists()) {
+
+                        //get username
                         String matchUsername = dataSnapshot.child("users").child(child.getKey()).child("username").getValue().toString();
+
+                        //get photourl
+                        String photoUrl = dataSnapshot.child("users").child(child.getKey()).child("photoUrl").getValue().toString();
 
                         //initialize matchInfo details and format
                         Spannable sPosition = new SpannableString("");
@@ -169,7 +174,7 @@ public class TabChat extends BackHandledFragment {
                                                 if (newItem) {
 
                                                     //create new list item based off username and uid
-                                                    mConnectionListItem = new ConnectionListItem(matchUsername, roomId, matchInfo);
+                                                    mConnectionListItem = new ConnectionListItem(matchUsername, roomId, matchInfo, photoUrl);
 
                                                     // Add the item to the adapter
                                                     mConnectionListAdapter.addItem(mConnectionListItem);
@@ -196,7 +201,7 @@ public class TabChat extends BackHandledFragment {
                                         memberRef.child(roomId).setValue(members);
 
                                         // pass the user name and the room number both strings
-                                        mConnectionListItem = new ConnectionListItem(matchUsername, roomId, matchInfo);
+                                        mConnectionListItem = new ConnectionListItem(matchUsername, roomId, matchInfo, photoUrl);
 
                                         // Add the item to the adapter
                                         mConnectionListAdapter.addItem(mConnectionListItem);

@@ -18,10 +18,10 @@
 
         <ImageView
             android:id="@+id/image_connection"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/profile_padding"/>
 
         <TextView
@@ -32,7 +32,7 @@
             android:layout_toRightOf="@+id/image_connection"
             android:layout_alignParentTop="true"
             android:lines="1"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/textColorDark"/>
 
         <TextView
             android:id="@+id/info_connection"

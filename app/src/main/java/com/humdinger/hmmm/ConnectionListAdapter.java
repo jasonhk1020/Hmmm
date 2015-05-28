@@ -3,7 +3,11 @@ package com.humdinger.hmmm;
 import android.app.Activity;
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +15,13 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -147,7 +153,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
     public void onBindViewHolder(ConnectionListAdapter.ViewHolder viewHolder, int i) {
         ConnectionListItem connectionListItem = mConnectionListItems.get(i);
         viewHolder.setText(connectionListItem.getMatchUsername(), connectionListItem.getMatchInfo());
-
+        viewHolder.setImage(connectionListItem.getPhotoUrl());
 
     }
 
@@ -156,14 +162,17 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
         return mConnectionListItems.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView username;
         private TextView info;
+        private ImageView imageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             username = (TextView) itemView.findViewById(R.id.username_connection);
             info = (TextView) itemView.findViewById(R.id.info_connection);
+            imageView = (ImageView) itemView.findViewById(R.id.image_connection);
+
         }
 
         public void setText(String username, CharSequence info) {
@@ -171,6 +180,9 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
             this.info.setText(info);
         }
 
+        public void setImage(String photoUrl) {
+            new LoadProfileImage(imageView).execute(photoUrl);
+        }
 
     }
 
@@ -199,6 +211,34 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
             Chat chat = new Chat(input, mUsername);
             mFirebaseRef.push().setValue(chat);
             inputText.setText("");
+        }
+    }
+
+    /**
+     * Background Async task to load user profile picture from url
+     * */
+    private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public LoadProfileImage(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
         }
     }
 }

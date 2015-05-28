@@ -9,6 +9,7 @@
     <color name="actionMenuTextColor">#FFFFFF</color>
     <color name="transparent">#00000000</color>
     <color name="cardBackground">#FFF9C4</color>
+    <color name="textColorDark">#F57F17</color>
     <color name="titleColor">#FFFFFF</color>
     <color name="textColorPrimary">#000000</color>
     <color name="textColorSecondary">#000000</color>

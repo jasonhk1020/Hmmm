@@ -196,12 +196,33 @@ public class TabMatch extends Fragment {
                     usernameView.setText(removeNull(username));
 
                     //position company and industry into sentence
-                    Spannable sPosition = new SpannableString(position + " at ");
-                    Spannable sCompany = new SpannableString(company + " in ");
-                    Spannable sIndustry = new SpannableString(industry);
-                    sPosition.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, position.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    sCompany.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, company.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    sIndustry.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, industry.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    Spannable sPosition = new SpannableString("");
+                    Spannable sCompany = new SpannableString("");
+                    Spannable sIndustry = new SpannableString("");
+
+                    //logic for adding conjunctions and bolding
+                    if (!position.equals("")) {
+                        sPosition = new SpannableString(position);
+                        sPosition.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sPosition.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                    if(!company.equals("")) {
+                        if (!position.equals("")) {
+                            sCompany = new SpannableString(" at " + company);
+                            sCompany.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 4, sCompany.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        } else {
+                            sCompany = new SpannableString(company);
+                            sCompany.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sCompany.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                    }
+                    if(!industry.equals("")) {
+                        if (!position.equals("") || !company.equals("")) {
+                            sIndustry = new SpannableString(" in " + industry);
+                            sIndustry.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 4, sIndustry.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        } else {
+                            sIndustry = new SpannableString(industry);
+                            sIndustry.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sIndustry.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                    }
 
                     //write info to view
                     TextView positionCompanyIndustryView = (TextView) v.findViewById(R.id.match_position_company_industry);
