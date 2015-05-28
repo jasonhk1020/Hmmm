@@ -146,7 +146,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
     @Override
     public void onBindViewHolder(ConnectionListAdapter.ViewHolder viewHolder, int i) {
         ConnectionListItem connectionListItem = mConnectionListItems.get(i);
-        viewHolder.setText(connectionListItem.getMatchUsername());
+        viewHolder.setText(connectionListItem.getMatchUsername(), connectionListItem.getMatchInfo());
 
 
     }
@@ -157,16 +157,21 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView text;
+        private TextView username;
+        private TextView info;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            text = (TextView) itemView.findViewById(R.id.text_connection);
+            username = (TextView) itemView.findViewById(R.id.username_connection);
+            info = (TextView) itemView.findViewById(R.id.info_connection);
         }
 
-        public void setText(String text) {
-            this.text.setText(text);
+        public void setText(String username, CharSequence info) {
+            this.username.setText(username);
+            this.info.setText(info);
         }
+
+
     }
 
     private void setInvisible(boolean mBoolean) {

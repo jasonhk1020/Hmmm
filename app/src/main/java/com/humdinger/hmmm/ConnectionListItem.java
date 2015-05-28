@@ -12,17 +12,19 @@ public class ConnectionListItem implements Serializable{
     private String status;
     private Calendar date;
     private String room;
+    private CharSequence matchInfo;
 
-    public ConnectionListItem(String matchUsername, String room) {
-        this(null, matchUsername, "Open", Calendar.getInstance(), room);
+    public ConnectionListItem(String matchUsername, String room, CharSequence matchInfo) {
+        this(null, matchUsername, "Open", Calendar.getInstance(), room, matchInfo);
     }
 
-    public ConnectionListItem(Long id, String matchUsername, String status, Calendar date, String room){
+    public ConnectionListItem(Long id, String matchUsername, String status, Calendar date, String room, CharSequence matchInfo){
         setId(id);
         setMatchUsername(matchUsername);
         setStatus(status);
         setDate(date);
         setRoom(room);
+        setMatchInfo(matchInfo);
     }
 
     public String getMatchUsername() {
@@ -64,4 +66,13 @@ public class ConnectionListItem implements Serializable{
     public String getRoom() {
         return room;
     }
+
+    public CharSequence getMatchInfo() {
+        return matchInfo;
+    }
+
+    public void setMatchInfo(CharSequence matchInfo) {
+        this.matchInfo = matchInfo;
+    }
+
 }

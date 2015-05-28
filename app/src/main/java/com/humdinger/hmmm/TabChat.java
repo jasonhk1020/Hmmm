@@ -7,6 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,6 +84,44 @@ public class TabChat extends BackHandledFragment {
                     //set up the potential match's name and room number
                     if (dataSnapshot.child("users").child(child.getKey()).child("username").exists()) {
                         String matchUsername = dataSnapshot.child("users").child(child.getKey()).child("username").getValue().toString();
+
+                        //initialize matchInfo details and format
+                        Spannable sPosition = new SpannableString("");
+                        Spannable sCompany = new SpannableString("");
+                        Spannable sIndustry = new SpannableString("");
+                        CharSequence matchInfo;
+
+                        if (dataSnapshot.child("users").child(child.getKey()).child("position").exists()) {
+                            sPosition = new SpannableString(dataSnapshot.child("users").child(child.getKey()).child("position").getValue().toString());
+                            sPosition.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sPosition.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                        if (dataSnapshot.child("users").child(child.getKey()).child("company").exists()) {
+                            if (sPosition.length() != 0 && !dataSnapshot.child("users").child(child.getKey()).child("company").getValue().toString().equals("")) {
+                                sCompany = new SpannableString(" at " + dataSnapshot.child("users").child(child.getKey()).child("company").getValue().toString());
+                                sCompany.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 4, sCompany.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                            } else {
+                                sCompany = new SpannableString(dataSnapshot.child("users").child(child.getKey()).child("company").getValue().toString());
+                                sCompany.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sCompany.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            }
+                        }
+                        if (dataSnapshot.child("users").child(child.getKey()).child("industry").exists()) {
+                            if (sPosition.length() != 0 || sCompany.length() != 0 && !dataSnapshot.child("users").child(child.getKey()).child("industry").getValue().toString().equals("")) {
+                                sIndustry = new SpannableString(" in " + dataSnapshot.child("users").child(child.getKey()).child("industry").getValue().toString());
+                                sIndustry.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 4, sIndustry.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            } else {
+                                sIndustry = new SpannableString(dataSnapshot.child("users").child(child.getKey()).child("industry").getValue().toString());
+                                sIndustry.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sIndustry.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            }
+                        }
+
+                        if (sCompany.length() == 0 && sPosition.length() == 0 && sIndustry.length() == 0) {
+                            matchInfo = "Profile Details Unavailable";
+                        } else {
+                            matchInfo = TextUtils.concat(sPosition, sCompany, sIndustry);
+                        }
+
+                        //initialize roomId
                         String roomId = null;
 
 
@@ -127,7 +169,7 @@ public class TabChat extends BackHandledFragment {
                                                 if (newItem) {
 
                                                     //create new list item based off username and uid
-                                                    mConnectionListItem = new ConnectionListItem(matchUsername, roomId);
+                                                    mConnectionListItem = new ConnectionListItem(matchUsername, roomId, matchInfo);
 
                                                     // Add the item to the adapter
                                                     mConnectionListAdapter.addItem(mConnectionListItem);
@@ -154,7 +196,7 @@ public class TabChat extends BackHandledFragment {
                                         memberRef.child(roomId).setValue(members);
 
                                         // pass the user name and the room number both strings
-                                        mConnectionListItem = new ConnectionListItem(matchUsername, roomId);
+                                        mConnectionListItem = new ConnectionListItem(matchUsername, roomId, matchInfo);
 
                                         // Add the item to the adapter
                                         mConnectionListAdapter.addItem(mConnectionListItem);
