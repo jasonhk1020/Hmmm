@@ -3,6 +3,7 @@ package com.humdinger.hmmm;
 import android.app.Activity;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.firebase.client.Query;
@@ -37,18 +38,26 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
         // Map a Chat object to an entry in our listview
         String author = chat.getAuthor();
         TextView messageText = (TextView) view.findViewById(R.id.message);
+        LinearLayout wrapper = (LinearLayout) view.findViewById(R.id.wrapper);
+        float scale = view.getResources().getDisplayMetrics().density;
 
         // If the message was sent by this user, color it differently
         if (author != null && author.equals(mUsername)) {
             //this is you
             messageText.setTextColor(view.getResources().getColor(R.color.textColorPrimary));
-            messageText.setGravity(Gravity.RIGHT);
+            messageText.setBackgroundResource(R.drawable.chatbubble_right);
+            messageText.setPadding((int) (8*scale +0.5f),(int) (8*scale +0.5f),(int) (8*scale +5.5f),(int) (8*scale +0.5f)); //add 5 pixels more for right because of the triangle
+            wrapper.setGravity(Gravity.RIGHT);
+
         } else {
             //this is others
             messageText.setTextColor(view.getResources().getColor(R.color.colorPrimaryDark));
-            messageText.setGravity(Gravity.LEFT);
+            messageText.setBackgroundResource(R.drawable.chatbubble_left);
+            messageText.setPadding((int) (8*scale +5.5f),(int) (8*scale +0.5f),(int) (8*scale +0.5f),(int) (8*scale +0.5f)); //add 5 pixels more for left because of the triangle
+            wrapper.setGravity(Gravity.LEFT);
         }
         messageText.setText(chat.getMessage());
+
 
     }
 

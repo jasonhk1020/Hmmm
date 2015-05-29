@@ -4,6 +4,9 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="profile_padding">4dp</dimen>
     <dimen name="profile_margin">8dp</dimen>
+    <dimen name="message_padding">8dp</dimen>
+    <dimen name="message_margin_vertical">2dp</dimen>
+    <dimen name="message_margin_horizontal">16dp</dimen>
 
 
 </resources>

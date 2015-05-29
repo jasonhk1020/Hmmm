@@ -52,7 +52,7 @@
             android:inputType="textCapWords"
             android:lines="1"
             android:singleLine="true"
-            android:background="@color/cardBackground"
+            android:background="@drawable/edittext_yellow"
             android:hint="Position"/>
 
         <EditText
@@ -64,7 +64,7 @@
             android:inputType="textCapWords"
             android:lines="1"
             android:singleLine="true"
-            android:background="@color/cardBackground"
+            android:background="@drawable/edittext_yellow"
             android:hint="Company"/>
 
         <EditText
@@ -76,7 +76,7 @@
             android:inputType="textCapWords"
             android:lines="1"
             android:singleLine="true"
-            android:background="@color/cardBackground"
+            android:background="@drawable/edittext_yellow"
             android:hint="Industry"/>
     </LinearLayout>
 
@@ -89,7 +89,7 @@
         android:layout_marginRight="@dimen/profile_margin"
         android:layout_marginTop="@dimen/profile_margin"
         android:textSize="14sp"
-        android:background="@color/cardBackground"
+        android:background="@drawable/edittext_yellow"
         android:gravity="left|top"
         android:padding="@dimen/profile_padding"
         android:hint="About Me (Max 150 characters)"
