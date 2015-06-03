@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -43,6 +44,7 @@ public class TabChat extends BackHandledFragment {
     private String matchUsername;
     private String matchUid;
     private TextView matchText;
+    private RelativeLayout messageBar;
 
     private Firebase memberRef;
 
@@ -78,6 +80,7 @@ public class TabChat extends BackHandledFragment {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 //now go loop through your connections
                 for (DataSnapshot child : dataSnapshot.child("users").child(uid).child("connections").getChildren()) {
 
@@ -229,6 +232,9 @@ public class TabChat extends BackHandledFragment {
         //usertext placeholder
         matchText = (TextView) v.findViewById(R.id.chat_matchUsername);
 
+        //deal with relative layout
+        messageBar = (RelativeLayout) v.findViewById(R.id.messageBar);
+
         //deal with display visibility
         mBoolean = true;
         setInvisible(mBoolean);
@@ -247,6 +253,7 @@ public class TabChat extends BackHandledFragment {
             inputButton.setVisibility(View.INVISIBLE);
             matchText.setVisibility(View.INVISIBLE);
             mRecyclerView.setVisibility(View.VISIBLE);
+            messageBar.setVisibility(View.INVISIBLE);
         } else {
             //show the message dialog
             chatView.setVisibility(View.VISIBLE);
@@ -254,6 +261,7 @@ public class TabChat extends BackHandledFragment {
             inputButton.setVisibility(View.VISIBLE);
             matchText.setVisibility(View.VISIBLE);
             mRecyclerView.setVisibility(View.INVISIBLE);
+            messageBar.setVisibility(View.VISIBLE);
         }
     }
 

@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/image_connection"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/profile_padding"/>
@@ -41,7 +41,7 @@
             android:textSize="12sp"
             android:layout_toRightOf="@+id/image_connection"
             android:layout_below="@+id/username_connection"
-            android:lines="1"/>
+            android:lines="2"/>
 
         </RelativeLayout>
 

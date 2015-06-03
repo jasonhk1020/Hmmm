@@ -8,6 +8,7 @@
     <color name="toolbarColor">#FFFFFF</color>
     <color name="actionMenuTextColor">#FFFFFF</color>
     <color name="transparent">#00000000</color>
+    <color name="buttonColor">#D8D8D8</color>
     <color name="cardBackground">#FFF9C4</color>
     <color name="textColorDark">#F57F17</color>
     <color name="titleColor">#FFFFFF</color>

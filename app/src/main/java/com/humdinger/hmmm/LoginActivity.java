@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
@@ -26,6 +27,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.plus.Plus;
+import com.parse.FunctionCallback;
+import com.parse.LogInCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
+import com.parse.ParseInstallation;
+import com.parse.ParseUser;
 
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -208,6 +215,7 @@ public class LoginActivity extends ActionBarActivity implements
                 try {
                     String scope = String.format("oauth2:%s", Scopes.PLUS_LOGIN);
                     token = GoogleAuthUtil.getToken(LoginActivity.this, Plus.AccountApi.getAccountName(mGoogleApiClient), scope);
+
                 } catch (IOException transientEx) {
                     /* Network or server error */
                     Log.e(TAG, "Error authenticating with Google: " + transientEx);
@@ -235,6 +243,51 @@ public class LoginActivity extends ActionBarActivity implements
                 if (token != null) {
                     /* Successfully got OAuth token, now login with Google */
                     mFirebaseRef.authWithOAuthToken("google", token, new AuthResultHandler("google"));
+
+                    String email =  Plus.AccountApi.getAccountName(mGoogleApiClient);
+                    //parse login
+                    final HashMap<String, Object> params = new HashMap<String, Object>();
+                    params.put("code", token);
+                    params.put("email", email);
+
+                    //loads the Cloud function to create a Google user in parse
+                    ParseCloud.callFunctionInBackground("accessGoogleUser", params, new FunctionCallback<Object>() {
+                        @Override
+                        public void done(Object returnObj, ParseException e) {
+
+                            if (e == null) {
+                                ParseUser.becomeInBackground(returnObj.toString(), new LogInCallback() { //temporarily hardcoded
+                                    public void done(ParseUser user, ParseException e) {
+                                        if (user != null && e == null) {
+                                            Log.i(TAG, "The Google user validated");
+
+                                            // Associate the device with a user
+                                            ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+                                            installation.put("user",user);
+                                            installation.saveInBackground();
+
+                                        } else if (e != null) {
+                                            Toast.makeText(LoginActivity.this, "There was a problem creating your account.", Toast.LENGTH_SHORT).show();
+                                            e.printStackTrace();
+                                            mGoogleApiClient.disconnect();
+                                        } else
+                                            Log.i(TAG, "The Google token could not be validated");
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(LoginActivity.this, "There was a problem creating your account.", Toast.LENGTH_LONG).show();
+                                e.printStackTrace();
+                                ParseErrorHandler.handleParseError(e);
+                                mGoogleApiClient.disconnect();
+                            }
+                        }
+                    });
+
+
+
+
+
+
                     token = null;
                 } else if (errorMessage != null) {
                     mAuthProgressDialog.hide();
@@ -244,6 +297,9 @@ public class LoginActivity extends ActionBarActivity implements
         };
         task.execute();
     }
+
+
+
 
     private class AuthResultHandler implements Firebase.AuthResultHandler {
 

@@ -135,18 +135,18 @@
         <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\bolts-android-1.2.0-bb5ebff60cfaa5cbaf3176721efa39c02eea4717.jar" />
     </item>
     <item
-        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.1\classes.jar"
-        jumboMode="false"
-        revision="22.0.0"
-        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
-        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-51d1cfb4a4aa8d5a644458cff0262a9b75ad418e.jar" />
-    </item>
-    <item
         jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-games\7.3.0\classes.jar"
         jumboMode="false"
         revision="22.0.0"
         sha1="3b4ff5c39dace8f3b4ab4cab8191785547a0815f">
         <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-1312910766cbb8ec222a13f77dcf92ca3c383c9a.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.1\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-51d1cfb4a4aa8d5a644458cff0262a9b75ad418e.jar" />
     </item>
     <item
         jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-nearby\7.3.0\classes.jar"

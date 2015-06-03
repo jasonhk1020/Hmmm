@@ -8,8 +8,8 @@ android {
         applicationId "com.humdinger.hmmm"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 102
-        versionName "1.2"
+        versionCode 103
+        versionName "1.3"
     }
     signingConfigs {
         release {
