@@ -154,8 +154,10 @@ public class TabChat extends BackHandledFragment {
                                         //check to see if they and you are in there
                                         if (mChild.hasChild(child.getKey()) && mChild.hasChild(uid)) {
 
-                                            //check to see if both are true
+                                            //if both of you are set to true
                                             if ((Boolean) mChild.child(child.getKey()).getValue() && (Boolean) mChild.child(uid).getValue()) {
+                                                //don't need a new room, we already have one
+                                                newRoom = false;
 
                                                 //assign matches name and room number
                                                 roomId = mChild.getKey();
@@ -177,17 +179,13 @@ public class TabChat extends BackHandledFragment {
                                                 if (newItem) {
 
                                                     //create new list item based off username and uid
-                                                    mConnectionListItem = new ConnectionListItem(matchUsername, roomId, matchInfo, photoUrl);
+                                                    mConnectionListItem = new ConnectionListItem(matchUsername, roomId, matchInfo, photoUrl, child.getKey());
 
                                                     // Add the item to the adapter
                                                     mConnectionListAdapter.addItem(mConnectionListItem);
-
                                                 }
-                                                //don't need a new room, we already have one
-                                                newRoom = false;
                                             }
                                         }
-
                                     }
 
                                     //we need a new room
@@ -204,7 +202,7 @@ public class TabChat extends BackHandledFragment {
                                         memberRef.child(roomId).setValue(members);
 
                                         // pass the user name and the room number both strings
-                                        mConnectionListItem = new ConnectionListItem(matchUsername, roomId, matchInfo, photoUrl);
+                                        mConnectionListItem = new ConnectionListItem(matchUsername, roomId, matchInfo, photoUrl, child.getKey());
 
                                         // Add the item to the adapter
                                         mConnectionListAdapter.addItem(mConnectionListItem);

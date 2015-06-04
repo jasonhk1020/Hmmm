@@ -1,10 +1,14 @@
 package com.humdinger.hmmm;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.parse.ParseAnalytics;
+import com.parse.PushService;
 
 
 public class MainActivity extends ActionBarActivity implements BackHandledFragment.BackHandlerInterface {
@@ -46,7 +50,19 @@ public class MainActivity extends ActionBarActivity implements BackHandledFragme
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
 
-        //get current page
+        //track how many times app has been opened
+        PushService.setDefaultPushCallback(this, MainActivity.class);
+        ParseAnalytics.trackAppOpened(getIntent());
+
+        //get parse push intents
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            String jsonData = extras.getString( "com.parse.Data" );
+            if (jsonData != null) {
+                pager.setCurrentItem(1);
+            }
+        }
 
 
     }

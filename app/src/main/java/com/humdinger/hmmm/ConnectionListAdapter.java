@@ -3,11 +3,7 @@ package com.humdinger.hmmm;
 import android.app.Activity;
 import android.content.Context;
 import android.database.DataSetObserver;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +17,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
 
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by jasonhk1020 on 4/13/2015.
@@ -76,6 +75,8 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                 int mPosition = mRecyclerView.getChildPosition(v);
                 ConnectionListItem connectionListItem = mConnectionListItems.get(mPosition);
                 String mRoom = connectionListItem.getRoom();
+                final String matchUid = connectionListItem.getMatchUid();
+                final String matchUsername = connectionListItem.getMatchUsername();
 
                 //set the chat room
                 mFirebaseRef = new Firebase(mContext.getResources().getString(R.string.FIREBASE_URL)).child("chat").child(mRoom);
@@ -103,11 +104,11 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                 inputButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        sendMessage();
+                        sendMessage(matchUid);
                     }
                 });
 
-                //input text placeholder
+                //input text handle hide key and send message (placeholder probable doesn't get kalled because on keycode_enter doesn't exist)
                 inputText = (EditText) ((Activity)mContext).findViewById(R.id.messageInput);
                 inputText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
@@ -115,7 +116,6 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                         if (keyEvent != null && (keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
                             InputMethodManager inputMethodManager = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
                             inputMethodManager.hideSoftInputFromWindow(inputText.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
-                            sendMessage();
                         }
                         return true;
                     }
@@ -207,41 +207,26 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
         }
     }
 
-    private void sendMessage() {
+    private void sendMessage(String matchUid) {
         EditText inputText = (EditText) ((Activity)mContext).findViewById(R.id.messageInput);
         String input = inputText.getText().toString();
         if (!input.equals("")) {
             Chat chat = new Chat(input, mUsername);
             mFirebaseRef.push().setValue(chat);
             inputText.setText("");
-        }
-    }
 
-    /**
-     * Background Async task to load user profile picture from url
-     * */
-    private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public LoadProfileImage(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("message", input);
+            params.put("uid",matchUid);
+            params.put("username",mUsername);
+            ParseCloud.callFunctionInBackground("notification", params, new FunctionCallback<String>() {
+                @Override
+                public void done(String result, ParseException e) {
+                    if (e == null) {
+                        // result is "Hello world!"
+                    }
+                }
+            });
         }
     }
 }

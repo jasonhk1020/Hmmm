@@ -266,6 +266,7 @@ public class LoginActivity extends ActionBarActivity implements
                                             installation.put("user",user);
                                             installation.saveInBackground();
 
+
                                         } else if (e != null) {
                                             Toast.makeText(LoginActivity.this, "There was a problem creating your account.", Toast.LENGTH_SHORT).show();
                                             e.printStackTrace();
@@ -336,6 +337,11 @@ public class LoginActivity extends ActionBarActivity implements
                 String uid = authData.getUid();
                 map.put("uid", uid);
                 prefs.edit().putString("uid",uid).commit();
+
+                // Associate the device with a user
+                ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+                installation.put("uid",uid);
+                installation.saveInBackground();
 
                 //add username
                 String username = authData.getProviderData().get("displayName").toString();
