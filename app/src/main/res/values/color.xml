@@ -18,5 +18,6 @@
     <color name="card_bg">#EBEBEB</color>
     <color name="card_outline">#D0D0CE</color>
     <color name="white">#FFFFFF</color>
+    <color name="red">#D50000</color>
 
 </resources>

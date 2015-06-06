@@ -150,24 +150,38 @@ public final class DialogAdapter extends BaseAdapter {
                     case R.id.action_floating_match_cancel:
                         map = new HashMap<String, Object>();
                         map.put(model.getMatchUid(), false);
-                        mFirebaseRef.updateChildren(map);
-                        remove(model);
-                        dialog.dismiss();
+                        mFirebaseRef.updateChildren(map, new Firebase.CompletionListener() {
+                            @Override
+                            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                                if (firebaseError != null) {
+                                } else {
+                                    remove(model);
+                                    dialog.dismiss();
+                                    System.out.println("Data saved successfully.");
+                                }
+                            }
+                        });
                         return true;
                     case R.id.action_floating_match_accept:
                         map = new HashMap<String, Object>();
                         map.put(model.getMatchUid(), true);
-                        mFirebaseRef.updateChildren(map);
-                        remove(model);
-                        dialog.dismiss();
+                        mFirebaseRef.updateChildren(map, new Firebase.CompletionListener() {
+                            @Override
+                            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                                if (firebaseError != null) {
+                                } else {
+                                    remove(model);
+                                    dialog.dismiss();
+                                    System.out.println("Data saved successfully.");
+                                }
+                            }
+                        });
                         return true;
                     default:
                         return true;
                 }
             }
         });
-
-
 
 		return v;
 	}

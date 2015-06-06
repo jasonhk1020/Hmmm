@@ -91,23 +91,10 @@ public class TabProfile extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.putExtra("forget",false);
                 getActivity().setResult(getActivity().RESULT_OK, intent);
                 getActivity().finish();
             }
         });
-
-        Button forgetButton = (Button) v.findViewById(R.id.forget_button);
-        forgetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.putExtra("forget",true);
-                getActivity().setResult(getActivity().RESULT_OK, intent);
-                getActivity().finish();
-            }
-        });
-
 
         return v;
     }

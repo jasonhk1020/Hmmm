@@ -167,32 +167,21 @@ public class LoginActivity extends ActionBarActivity implements
             case RC_GOOGLE_LOGOUT:
 
                 if (resultCode == RESULT_OK) {
-                    //logic to determine if we need to forget the user
-                    boolean forget = data.getBooleanExtra("forget", false);
                     if (this.mAuthData != null) {
                         mFirebaseRef.unauth();
-
                         if (this.mAuthData.getProvider().equals("google")) {
-
                             if (mGoogleApiClient.isConnected()) {
-
-                                if (!forget) {
-                                    //just logout
-                                    Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-                                    mGoogleApiClient.disconnect();
-                                } else {
-                                    //logout and forget user
-                                    Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-                                    Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient)
-                                            .setResultCallback(new ResultCallback<Status>() {
-                                                @Override
-                                                public void onResult(Status status) {
-                                                    Log.e(TAG, "User access revoked!");
-                                                    mGoogleApiClient.disconnect(); //this might be redundant
-                                                    mAuthProgressDialog.show();
-                                                }
-                                            });
-                                }
+                                //logout and forget user
+                                Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                                Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient)
+                                        .setResultCallback(new ResultCallback<Status>() {
+                                            @Override
+                                            public void onResult(Status status) {
+                                                Log.e(TAG, "User access revoked!");
+                                                mGoogleApiClient.disconnect(); //this might be redundant
+                                                mAuthProgressDialog.show();
+                                            }
+                                        });
                             }
                         }
                     }

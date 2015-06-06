@@ -53,7 +53,7 @@
             android:lines="1"
             android:singleLine="true"
             android:background="@drawable/edittext_yellow"
-            android:hint="Position"/>
+            android:hint="Position/Student"/>
 
         <EditText
             android:id="@+id/profile_company"
@@ -65,7 +65,7 @@
             android:lines="1"
             android:singleLine="true"
             android:background="@drawable/edittext_yellow"
-            android:hint="Company"/>
+            android:hint="Company/School"/>
 
         <EditText
             android:id="@+id/profile_industry"
@@ -77,7 +77,7 @@
             android:lines="1"
             android:singleLine="true"
             android:background="@drawable/edittext_yellow"
-            android:hint="Industry"/>
+            android:hint="Industry/Major"/>
     </LinearLayout>
 
     <EditText
@@ -102,20 +102,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/action_logout"
-        android:layout_above="@+id/forget_button"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:isScrollContainer="false"/>
-
-    <Button
-        android:id="@+id/forget_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/action_forget"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:isScrollContainer="false"/>
+        android:isScrollContainer="false"
+        android:textColor="@color/white"
+        android:textAllCaps="true"
+        android:background="@color/red"/>
 
 </RelativeLayout>
