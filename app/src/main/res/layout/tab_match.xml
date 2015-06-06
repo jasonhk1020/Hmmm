@@ -3,71 +3,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/layout_match"
+    <com.humdinger.hmmm.CardContainer
+        android:id="@+id/match_card_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="@dimen/match_padding"/>
+
+    <com.humdinger.hmmm.CardContainer
+        android:id="@+id/match_dialog_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="@dimen/match_padding"/>
+
+    <TextView
+        android:id="@+id/match_empty_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="There are no more matches to view. Please check back later and invite your friends!"
+        android:gravity="center"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:padding="@dimen/activity_vertical_margin"/>
+
+    <include layout="@layout/toolbar_match"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:focusableInTouchMode="true">
-
-        <ImageView
-            android:id="@+id/match_image"
-            android:layout_width="240dp"
-            android:layout_height="240dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/activity_vertical_margin"/>
-
-        <TextView
-            android:id="@+id/match_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="0dp"
-            android:textSize="14sp"
-            android:lines="1"
-            android:singleLine="true"
-            android:background="@color/transparent"
-            android:capitalize="words"
-            android:textColorHint="@drawable/selector"
-            android:gravity="left"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"/>
-
-        <TextView
-            android:id="@+id/match_position_company_industry"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="0dp"
-            android:textSize="14sp"
-            android:lines="2"
-            android:background="@color/transparent"
-            android:textColorHint="@drawable/selector"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"/>
-
-        <TextView
-            android:id="@+id/match_description"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:padding="0dp"
-            android:textSize="14sp"
-            android:lines="3"
-            android:background="@color/transparent"
-            android:textColorHint="@drawable/selector"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"/>
-
-        <include layout="@layout/toolbar_match"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"/>
-
-    </LinearLayout>
-
-
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
 </RelativeLayout>

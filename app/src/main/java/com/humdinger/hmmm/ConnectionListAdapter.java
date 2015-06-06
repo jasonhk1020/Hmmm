@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import android.text.style.StyleSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +20,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
@@ -33,14 +40,13 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
     private String mUsername;
     private RecyclerView mRecyclerView;
     private ArrayList<ConnectionListItem> mConnectionListItems = new ArrayList<ConnectionListItem>();
+    private Firebase roomRef;
+
     private ListView chatView;
-    private ChatListAdapter mChatListAdapter;
     private EditText inputText;
     private ImageButton inputButton;
-    private Firebase mFirebaseRef;
-    private Boolean mBoolean;
-    private TextView matchText;
     private RelativeLayout messageBar;
+    private TextView matchText;
 
     public void addItem(ConnectionListItem item) {
         mConnectionListItems.add(0, item);
@@ -64,7 +70,6 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
 
     @Override
     public ConnectionListAdapter.ViewHolder onCreateViewHolder(final ViewGroup viewGroup, int i) {
-
         View v = LayoutInflater.from(mContext).inflate(R.layout.connection_list_item, viewGroup, false);
 
         v.setOnClickListener(new View.OnClickListener() {
@@ -76,16 +81,13 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                 ConnectionListItem connectionListItem = mConnectionListItems.get(mPosition);
                 String mRoom = connectionListItem.getRoom();
                 final String matchUid = connectionListItem.getMatchUid();
-                final String matchUsername = connectionListItem.getMatchUsername();
 
-                //set the chat room
-                mFirebaseRef = new Firebase(mContext.getResources().getString(R.string.FIREBASE_URL)).child("chat").child(mRoom);
-                mChatListAdapter = new ChatListAdapter(mFirebaseRef, ((Activity)mContext), R.layout.chat_message, mUsername);
-
-                //chat view
-                chatView = (ListView) ((Activity)mContext).findViewById(R.id.chatView);
+                //set the chat room and attach to adapter
+                roomRef = new Firebase(mContext.getResources().getString(R.string.FIREBASE_URL)).child("chat").child(mRoom);
+                final ChatListAdapter mChatListAdapter = new ChatListAdapter(roomRef, ((Activity)mContext), R.layout.chat_message, mUsername);
 
                 //fill the chatview
+                chatView = (ListView) ((Activity)mContext).findViewById(R.id.chatView);
                 chatView.setAdapter(mChatListAdapter);
                 mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
                     @Override
@@ -95,11 +97,30 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                     }
                 });
 
+                //setup the match text
+                matchText = (TextView) ((Activity)mContext).findViewById(R.id.chat_matchUsername);
 
-                //relative layout for message bar
+                //need to ask firebase for the match's username!
+                Firebase matchRef = new Firebase(mContext.getResources().getString(R.string.FIREBASE_URL)).child("users").child(connectionListItem.getMatchUid()).child("username");
+                //just once
+                matchRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        //setup the match username display
+                        matchText.setText(dataSnapshot.getValue().toString());
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                });
+
+
+                //set the message bar layout for the buttons
                 messageBar = (RelativeLayout) ((Activity)mContext).findViewById(R.id.messageBar);
 
-                //button placeholders
+                //setup the buttons and text input
                 inputButton = (ImageButton) ((Activity)mContext).findViewById(R.id.sendButton);
                 inputButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -107,8 +128,6 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                         sendMessage(matchUid);
                     }
                 });
-
-                //input text handle hide key and send message (placeholder probable doesn't get kalled because on keycode_enter doesn't exist)
                 inputText = (EditText) ((Activity)mContext).findViewById(R.id.messageInput);
                 inputText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
@@ -120,7 +139,6 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                         return true;
                     }
                 });
-                //if deselecting the keyboard
                 inputText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
@@ -131,12 +149,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                     }
                 });
 
-                //set the username of the connection
-                matchText = (TextView) ((Activity)mContext).findViewById(R.id.chat_matchUsername);
-                matchText.setText(connectionListItem.getMatchUsername());
-
                 //change the view of buttons
-                mBoolean = false;
                 setInvisible(false);
             }
         });
@@ -147,15 +160,70 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                 return true;
             }
         });
+
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ConnectionListAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(final ConnectionListAdapter.ViewHolder viewHolder, int i) {
         ConnectionListItem connectionListItem = mConnectionListItems.get(i);
-        viewHolder.setText(connectionListItem.getMatchUsername(), connectionListItem.getMatchInfo());
-        viewHolder.setImage(connectionListItem.getPhotoUrl());
 
+        Firebase matchRef = new Firebase(mContext.getResources().getString(R.string.FIREBASE_URL)).child("users").child(connectionListItem.getMatchUid());
+        matchRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                //get username
+                String matchUsername = dataSnapshot.child("username").getValue().toString();
+
+                //get photourl
+                String photoUrl = dataSnapshot.child("photoUrl").getValue().toString();
+
+                //initialize matchInfo details and format
+                Spannable sPosition = new SpannableString("");
+                Spannable sCompany = new SpannableString("");
+                Spannable sIndustry = new SpannableString("");
+                CharSequence matchInfo;
+                if (dataSnapshot.child("position").exists()) {
+                    sPosition = new SpannableString(dataSnapshot.child("position").getValue().toString());
+                    sPosition.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sPosition.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+                if (dataSnapshot.child("company").exists()) {
+                    if (sPosition.length() != 0 && !dataSnapshot.child("company").getValue().toString().equals("")) {
+                        sCompany = new SpannableString(" at " + dataSnapshot.child("company").getValue().toString());
+                        sCompany.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 4, sCompany.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                    } else {
+                        sCompany = new SpannableString(dataSnapshot.child("company").getValue().toString());
+                        sCompany.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sCompany.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                }
+                if (dataSnapshot.child("industry").exists()) {
+                    if (sPosition.length() != 0 || sCompany.length() != 0 && !dataSnapshot.child("industry").getValue().toString().equals("")) {
+                        sIndustry = new SpannableString(" in " + dataSnapshot.child("industry").getValue().toString());
+                        sIndustry.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 4, sIndustry.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    } else {
+                        sIndustry = new SpannableString(dataSnapshot.child("industry").getValue().toString());
+                        sIndustry.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sIndustry.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                }
+                if (sCompany.length() == 0 && sPosition.length() == 0 && sIndustry.length() == 0) {
+                    matchInfo = "Profile Details Unavailable";
+                } else {
+                    matchInfo = TextUtils.concat(sPosition, sCompany, sIndustry);
+                }
+
+                //update the view
+                viewHolder.setText(matchUsername, matchInfo);
+                viewHolder.setImage(photoUrl);
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -164,30 +232,31 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView username;
-        private TextView info;
+
+        private TextView usernameText;
+        private TextView infoText;
         private ImageView imageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            username = (TextView) itemView.findViewById(R.id.username_connection);
-            info = (TextView) itemView.findViewById(R.id.info_connection);
+            usernameText = (TextView) itemView.findViewById(R.id.username_connection);
+            infoText = (TextView) itemView.findViewById(R.id.info_connection);
             imageView = (ImageView) itemView.findViewById(R.id.image_connection);
 
         }
 
         public void setText(String username, CharSequence info) {
-            this.username.setText(username);
-            this.info.setText(info);
+            this.usernameText.setText(username);
+            this.infoText.setText(info);
+
         }
 
         public void setImage(String photoUrl) {
             new LoadProfileImage(imageView).execute(photoUrl);
         }
-
     }
 
-    private void setInvisible(boolean mBoolean) {
+    public void setInvisible(boolean mBoolean) {
         if (mBoolean) {
             //show the connections list
             chatView.setVisibility(View.INVISIBLE);
@@ -207,12 +276,12 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
         }
     }
 
-    private void sendMessage(String matchUid) {
+    public void sendMessage(String matchUid) {
         EditText inputText = (EditText) ((Activity)mContext).findViewById(R.id.messageInput);
         String input = inputText.getText().toString();
         if (!input.equals("")) {
             Chat chat = new Chat(input, mUsername);
-            mFirebaseRef.push().setValue(chat);
+            roomRef.push().setValue(chat);
             inputText.setText("");
 
             HashMap<String, Object> params = new HashMap<String, Object>();
@@ -229,4 +298,17 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
             });
         }
     }
+
+    public boolean exists(ConnectionListItem item) {
+        boolean found = false;
+        for (ConnectionListItem i : mConnectionListItems) {
+            if (i.getRoom() != null) {
+                if (i.getRoom().equals(item.getRoom())) {
+                    found = true;
+                }
+            }
+        }
+        return found;
+    }
+
 }

@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
@@ -334,13 +335,13 @@ public class LoginActivity extends ActionBarActivity implements
                 Map<String, Object> map = new HashMap<String, Object>();
 
                 //add uniqueid
-                String uid = authData.getUid();
+                final String uid = authData.getUid();
                 map.put("uid", uid);
-                prefs.edit().putString("uid",uid).commit();
+                prefs.edit().putString("uid", uid).commit();
 
                 // Associate the device with a user
                 ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-                installation.put("uid",uid);
+                installation.put("uid", uid);
                 installation.saveInBackground();
 
                 //add username
@@ -350,7 +351,7 @@ public class LoginActivity extends ActionBarActivity implements
                 prefs.edit().putString("username", username).commit();
 
                 //establish cacheduserprofile hash map to get the photo url
-                Map<String,String> googleUserProfile = (HashMap<String,String>) authData.getProviderData().get("cachedUserProfile");
+                Map<String, String> googleUserProfile = (HashMap<String, String>) authData.getProviderData().get("cachedUserProfile");
                 //add photoUrl
                 String photoUrl = googleUserProfile.get("picture");
                 map.put("photoUrl", photoUrl);
@@ -358,6 +359,24 @@ public class LoginActivity extends ActionBarActivity implements
 
                 //save data to firebase users
                 mFirebaseRef.child("users").child(uid).updateChildren(map);
+
+                //check to see if you have your instance of connections already
+                mFirebaseRef.child("connections").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (!dataSnapshot.child(uid).exists()) {
+                            //since you don't, establish your own connections
+                            Map<String, Object> me = new HashMap<String, Object>();
+                            me.put(uid, true);
+                            mFirebaseRef.child("connections").updateChildren(me);
+                        }
+                    }
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                    }
+                });
+
+
 
                 //go to main activity
                 Intent intent = new Intent(mContext, MainActivity.class);

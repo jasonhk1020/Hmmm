@@ -14,7 +14,7 @@ public class CustomViewPager extends ViewPager {
 
     public CustomViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.enabled = false;  //false to turn off swiping
+        this.enabled = true;  //false to turn off swiping between fragments
     }
 
     @Override

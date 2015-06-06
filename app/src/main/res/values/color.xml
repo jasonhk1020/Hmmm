@@ -14,4 +14,9 @@
     <color name="titleColor">#FFFFFF</color>
     <color name="textColorPrimary">#000000</color>
     <color name="textColorSecondary">#000000</color>
+
+    <color name="card_bg">#EBEBEB</color>
+    <color name="card_outline">#D0D0CE</color>
+    <color name="white">#FFFFFF</color>
+
 </resources>

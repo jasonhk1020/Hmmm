@@ -1,35 +1,27 @@
 package com.humdinger.hmmm;
 
 
-import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.TextUtils;
-import android.text.style.StyleSpan;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,195 +30,147 @@ import java.util.Map;
 
 public class TabMatch extends Fragment {
 
-    private View v;
-    private Firebase mFirebaseRef;
-    private Firebase matchList;
-    private String mUsername;
-    private String uid;
-
-    private List<String> matchUidList;
-    private int counter;
-    private String matchUid;
-    private DataSnapshot userList;
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.tab_match,container,false);
 
+
         //get the user shared preferences
         SharedPreferences prefs = getActivity().getSharedPreferences("userPrefs", 0);
-        mUsername = prefs.getString("username", null);
-        uid = prefs.getString("uid", null);
+        String mUsername = prefs.getString("username", null);
+        final String uid = prefs.getString("uid", null);
 
-        //call access to all firebase
-        final Firebase allRef = new Firebase(getResources().getString(R.string.FIREBASE_URL));
+        //setup text view
+        TextView textView = (TextView) v.findViewById(R.id.match_empty_message);
 
-        //my firebase connections
-        mFirebaseRef = allRef.child("users").child(uid).child("connections");
+        //create the card container
+        final CardContainer mCardContainer = (CardContainer) v.findViewById(R.id.match_card_layout);
+        mCardContainer.setOrientation(Orientations.Orientation.Ordered);
+        mCardContainer.bringToFront();
+        textView.invalidate();
 
-        //listen for changes in all of firebase
-        allRef.addValueEventListener(new ValueEventListener() {
+        //create card container for diaglos
+        final CardContainer mDialogContainer = (CardContainer) v.findViewById(R.id.match_dialog_layout);
+        mDialogContainer.setOrientation(Orientations.Orientation.Ordered);
+        mDialogContainer.bringToFront();
+        mCardContainer.invalidate();
+        textView.invalidate();
+
+        //create adapters
+        final SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
+        final DialogAdapter dialogAdapter = new DialogAdapter(getActivity(), v);
+
+        //set adapters to the view
+        mCardContainer.setAdapter(adapter);
+        mDialogContainer.setAdapter(dialogAdapter);
+
+        //we are going to find matches to add
+        // get my connections
+        final Firebase myRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("connections").child(uid);
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                //your connections
-                DataSnapshot connectionsList = dataSnapshot.child("users").child(uid).child("connections");
+                //setup the myconnections dataSnapshot
+                final DataSnapshot myConnections = dataSnapshot;
 
-                //the usersList
-                userList = dataSnapshot.child("users");
+                //query the connections and order by your uid (null, then false, then true, then by alpha) just 50 results
+                Query queryRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("connections").orderByChild(uid).limitToFirst(50);
 
-                //reinitialize every time something new happens in the user list
-                matchUidList = new ArrayList<String>();
-                counter = 0;
+                //listen for new children added
+                queryRef.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot connection, String s) {
 
-                //loop through each user
-                for (final DataSnapshot user : userList.getChildren()) {
+                        //make sure it's not you
+                        if(!connection.getKey().equals(uid)) {
 
-                    //if the user is not you
-                    if (!user.getKey().equals(uid)) {
+                            //for each person, check to see if you are NOT mentioned
+                            if (!connection.child(uid).exists()) {
 
-                        DataSnapshot userConnections = user.child("connections");
+                                //since you are NOT mentioned check to see if you have NOT mentioned them
+                                if(!myConnections.child(connection.getKey()).exists()) {
 
-                        //check if you are in their connnection
-                        if (userConnections.child(uid).exists()) {
+                                    //since you have NOT mentioned them
 
-                            //if you exist and the value is true
-                            if (userConnections.child(uid).getValue() == true) {
+                                    //let's add them to the adapter
+                                    CardModel cardModel = new CardModel(connection.getKey());
 
-                                //check your connections to see if they exist in your connections
-                                if (connectionsList.child(user.getKey()).exists()) {
-
-                                    //if value is true
-                                    if (connectionsList.child(user.getKey()).getValue() == true) {
-
-                                    //if value false
-                                    } else if (connectionsList.child(user.getKey()).getValue() == false) {
-
+                                    //check if the item already exists in the adapater, if not let's add it
+                                    if(!adapter.exists(cardModel)) {
+                                        adapter.add(cardModel);
                                     }
+                                }
+                            } else { //since you exist in their connect... check the value
 
-                                //if you exist in their connections but they don't exist in yours...then let's introduce them to you
-                                } else {
+                                //if it's true
+                                if((Boolean) connection.child(uid).getValue()) {
 
-                                    //show dialog
-                                    final Dialog dialog = new Dialog(getActivity());
-                                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                    dialog.setContentView(R.layout.floating_match);
-                                    final Window window = dialog.getWindow();
-                                    window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+                                    //check to see if you have NOT mentioned them
+                                    if(!myConnections.child(connection.getKey()).exists()) {
 
-                                    //get their information
-                                    Map<String, String> map = (HashMap<String, String>) user.getValue();
-                                    String username = removeNull(map.get("username"));
-                                    String position = removeNull(map.get("position"));
-                                    String company = removeNull(map.get("company"));
-                                    String industry = removeNull(map.get("industry"));
-                                    String description = removeNull(map.get("description"));
-                                    String photoUrl = removeNull(map.get("photoUrl"));
+                                        //since you have NOT mentioned them
 
-                                    //profile image from google
-                                    ImageView imageView = (ImageView) dialog.findViewById(R.id.floating_match_image);
-                                    new LoadProfileImage(imageView).execute(photoUrl);
+                                        //let's add them to the adapter for displaying a popup dialog (notification too later on)
+                                        DialogModel dialogModel = new DialogModel(uid, connection.getKey());
 
-                                    //name
-                                    TextView usernameView = (TextView) dialog.findViewById(R.id.floating_match_username);
-                                    usernameView.setText(removeNull(username));
+                                        //check if the item already exists in the adapter, if not let's add it
+                                        if(!dialogAdapter.exists(dialogModel)) {
 
-                                    //position company and industry into sentence
-                                    Spannable sPosition = new SpannableString("");
-                                    Spannable sCompany = new SpannableString("");
-                                    Spannable sIndustry = new SpannableString("");
-
-                                    //logic for adding conjunctions and bolding
-                                    if (!position.equals("")) {
-                                        sPosition = new SpannableString(position);
-                                        sPosition.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sPosition.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                    }
-                                    if (!company.equals("")) {
-                                        if (!position.equals("")) {
-                                            sCompany = new SpannableString(" at " + company);
-                                            sCompany.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 4, sCompany.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                        } else {
-                                            sCompany = new SpannableString(company);
-                                            sCompany.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sCompany.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                        }
-                                    }
-                                    if (!industry.equals("")) {
-                                        if (!position.equals("") || !company.equals("")) {
-                                            sIndustry = new SpannableString(" in " + industry);
-                                            sIndustry.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 4, sIndustry.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                        } else {
-                                            sIndustry = new SpannableString(industry);
-                                            sIndustry.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sIndustry.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                            dialogAdapter.add(dialogModel);
                                         }
                                     }
 
-                                    //write info to view
-                                    TextView positionCompanyIndustryView = (TextView) dialog.findViewById(R.id.floating_match_position_company_industry);
-                                    positionCompanyIndustryView.setText(TextUtils.concat(sPosition, sCompany, sIndustry));
 
-                                    //description
-                                    TextView descriptionView = (TextView) dialog.findViewById(R.id.floating_match_description);
-                                    descriptionView.setText(removeNull(description));
-
-                                    //add match toolbar
-                                    Toolbar floatingMatchToolbar = (Toolbar) dialog.findViewById(R.id.toolbar_floating_match);
-                                    floatingMatchToolbar.inflateMenu(R.menu.menu_floating_match);
-                                    floatingMatchToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-                                        @Override
-                                        public boolean onMenuItemClick(MenuItem menuItem) {
-                                            Map<String, Object> map;
-                                            switch (menuItem.getItemId()) {
-                                                case R.id.action_floating_match_cancel:
-                                                    map = new HashMap<String, Object>();
-                                                    map.put(user.getKey().toString(), false);
-                                                    mFirebaseRef.updateChildren(map);
-                                                    dialog.dismiss();
-                                                    return true;
-                                                case R.id.action_floating_match_accept:
-                                                    map = new HashMap<String, Object>();
-                                                    map.put(user.getKey().toString(), true);
-                                                    mFirebaseRef.updateChildren(map);
-                                                    dialog.dismiss();
-                                                    return true;
-                                                default:
-                                                    return true;
-                                            }
-                                        }
-                                    });
-
-                                    dialog.show();
                                 }
 
-                            }
-
-                        // you are not mentioned in their connections
-                        } else {
-
-                            //check if you said yes to them if not, then add them to the list
-                            if (!connectionsList.child(user.getKey()).exists()) {
-                                //since you are not in their connnections...add them to the list
-                                // by the way even if you skipped them before you will see them again because you have not officially said NO to them when they say no to you
-                                matchUidList.add(user.getKey());
 
                             }
                         }
-
                     }
-                }
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    }
 
-                //now that you've looped through all the people....deal with the first view or match (new)
-                if (!matchUidList.isEmpty()) {
-                    populateView(matchUidList.get(counter), v, userList.child(matchUidList.get(counter)));
-                } else {
-                    //warn user there are no more people to see
-                    populateView(null, v, null);
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    }
 
-                }
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                    }
+                });
+
+
             }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
 
+            }
+        });
+
+
+        CardModel cardModel = new CardModel(null);
+        cardModel.setOnClickListener(new CardModel.OnClickListener() {
+            @Override
+            public void OnClickListener() {
+                Log.i("Swipeable Cards","I am pressing the card");
+            }
+        });
+        cardModel.setOnCardDismissedListener(new CardModel.OnCardDismissedListener() {
+            @Override
+            public void onLike() {
+                Log.i("Swipeable Cards","I like the card");
+            }
+
+            @Override
+            public void onDislike() {
+                Log.i("Swipeable Cards","I dislike the card");
             }
         });
 
@@ -236,43 +180,50 @@ public class TabMatch extends Fragment {
         matchToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
+                CardModel card;
                 switch (menuItem.getItemId()) {
-                    case R.id.action_match_cancel:
-                        if (!matchUidList.isEmpty()) {
-                            if (counter != matchUidList.size() - 1) {
-                                counter = counter + 1;
-                                populateView(matchUidList.get(counter), v, userList.child(matchUidList.get(counter)));
-                            } else {
-                                populateView(null, v, null);
-                            }
+                    case R.id.action_match_previous:
+                        if(!adapter.isEmpty()) {
+                            //get the bottom card
+                            card = adapter.getCardModel(adapter.getCount() - 1);
+
+                            //move card to top
+                            adapter.moveToTop(card);
                         }
+
+                        return true;
+
+                    case R.id.action_match_cancel:
+                        if(!adapter.isEmpty()) {
+                            //get the top card
+                            card = adapter.getCardModel(0);
+
+                            //remove it from the adapter view
+                            adapter.remove(card);
+
+                            //then add to back of stack
+                            adapter.add(card);
+                        }
+
                         return true;
                     case R.id.action_match_accept:
-                        if (!matchUidList.isEmpty()) {
-                            pairMatch(matchUidList.get(counter));
-                            if (counter != matchUidList.size() - 1) {
-                                counter = counter + 1;
-                                populateView(matchUidList.get(counter), v, userList.child(matchUidList.get(counter)));
-                            } else {
-                                populateView(null, v, null);
-                            }
-                        }
-                        return true;
-                    case R.id.action_match_previous:
-                        if (counter != 0) {
-                            counter = counter - 1;
-                            populateView(matchUidList.get(counter), v, userList.child(matchUidList.get(counter)));
-                        } else {
+                        if(!adapter.isEmpty()) {
+                            //get the top card
+                            card = adapter.getCardModel(0);
 
-                            if (matchUidList.size() == 1){
-                                populateView(matchUidList.get(counter),v, userList.child(matchUidList.get(counter)));
-                            } else {
-                                Toast.makeText(getActivity(), "There are no previous matches.", Toast.LENGTH_SHORT).show();
-                            }
+                            //remove it from the adapter view completely
+                            adapter.remove(card);
+
+                            //add them to your connections list
+                            Map<String, Object> map = new HashMap<String, Object>();
+                            map.put(card.getUid(), true);
+                            myRef.updateChildren(map);
                         }
+
                         return true;
                     case R.id.action_match_settings:
-                        Toast.makeText(getActivity(),"The settings menu is currently disabled.  We'll add search and filtering capability once there enough users.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(),"The settings menu is currently disabled.  We'll add search and filtering capability once there are enough users.",Toast.LENGTH_SHORT).show();
+                        return true;
                     default:
                         return true;
                 }
@@ -282,96 +233,4 @@ public class TabMatch extends Fragment {
         return v;
     }
 
-    private void pairMatch(String matchUid) {
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put(matchUid,true);
-        mFirebaseRef.updateChildren(map);
-    }
-
-    protected void populateView(String matchUid,final View v, DataSnapshot snapshot) {
-        // get uid
-        if (matchUid != null) {
-
-            //retrieve current user info from firebase
-            Map<String, String> map = (HashMap<String, String>) snapshot.getValue();
-            String username = removeNull(map.get("username"));
-            String position = removeNull(map.get("position"));
-            String company = removeNull(map.get("company"));
-            String industry = removeNull(map.get("industry"));
-            String description = removeNull(map.get("description"));
-            String photoUrl = removeNull(map.get("photoUrl"));
-
-            //profile image from google
-            ImageView imageView = (ImageView) v.findViewById(R.id.match_image);
-            new LoadProfileImage(imageView).execute(photoUrl);
-
-            //name
-            TextView usernameView = (TextView) v.findViewById(R.id.match_username);
-            usernameView.setText(removeNull(username));
-
-            //position company and industry into sentence
-            Spannable sPosition = new SpannableString("");
-            Spannable sCompany = new SpannableString("");
-            Spannable sIndustry = new SpannableString("");
-
-            //logic for adding conjunctions and bolding
-            if (!position.equals("")) {
-                sPosition = new SpannableString(position);
-                sPosition.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sPosition.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
-            if(!company.equals("")) {
-                if (!position.equals("")) {
-                    sCompany = new SpannableString(" at " + company);
-                    sCompany.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 4, sCompany.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                } else {
-                    sCompany = new SpannableString(company);
-                    sCompany.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sCompany.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-            }
-            if(!industry.equals("")) {
-                if (!position.equals("") || !company.equals("")) {
-                    sIndustry = new SpannableString(" in " + industry);
-                    sIndustry.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 4, sIndustry.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                } else {
-                    sIndustry = new SpannableString(industry);
-                    sIndustry.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sIndustry.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-            }
-
-            //write info to view
-            TextView positionCompanyIndustryView = (TextView) v.findViewById(R.id.match_position_company_industry);
-            positionCompanyIndustryView.setText(TextUtils.concat(sPosition, sCompany, sIndustry));
-
-            //description
-            TextView descriptionView = (TextView) v.findViewById(R.id.match_description);
-            descriptionView.setText(removeNull(description));
-
-        //show a dummy page
-        } else {
-            //profile image from google
-            ImageView imageView = (ImageView) v.findViewById(R.id.match_image);
-            imageView.setImageResource(android.R.color.transparent);
-
-            //name
-            TextView usernameView = (TextView) v.findViewById(R.id.match_username);
-            usernameView.setText("You've browsed through all the matches.");
-            usernameView.setGravity(Gravity.CENTER);
-
-            //write info to view
-            TextView positionCompanyIndustryView = (TextView) v.findViewById(R.id.match_position_company_industry);
-            positionCompanyIndustryView.setText("Check back soon and ask your friends to join.");
-            positionCompanyIndustryView.setGravity(Gravity.CENTER);
-
-            //description
-            TextView descriptionView = (TextView) v.findViewById(R.id.match_description);
-            descriptionView.setText("");
-        }
-    }
-
-    private String removeNull(String string) {
-        if (string == null) {
-            string = "";
-        }
-        return string;
-    }
 }
