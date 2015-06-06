@@ -257,7 +257,7 @@ public class LoginActivity extends ActionBarActivity implements
                         public void done(Object returnObj, ParseException e) {
 
                             if (e == null) {
-                                ParseUser.becomeInBackground(returnObj.toString(), new LogInCallback() { //temporarily hardcoded
+                                ParseUser.becomeInBackground(returnObj.toString(), new LogInCallback() {
                                     public void done(ParseUser user, ParseException e) {
                                         if (user != null && e == null) {
                                             Log.i(TAG, "The Google user validated");

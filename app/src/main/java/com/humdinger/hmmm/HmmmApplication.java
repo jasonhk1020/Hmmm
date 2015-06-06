@@ -16,9 +16,7 @@ public class HmmmApplication extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         Firebase.setAndroidContext(this);
-
         Parse.initialize(this, "anosokQZYDYl9RJkLFdZOZwgXjlThwKHXFZUXmCG", "v6AIkGOVQKkjZNRkC3KUgmKcRJRNYXI0vkYgsbVP");
-
         ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 }
