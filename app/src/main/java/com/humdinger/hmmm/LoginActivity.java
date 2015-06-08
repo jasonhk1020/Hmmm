@@ -260,12 +260,6 @@ public class LoginActivity extends ActionBarActivity implements
                                         if (user != null && e == null) {
                                             Log.i(TAG, "The Google user validated");
 
-/*                                            // Associate user to session
-                                            ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-                                            installation.put("user",user);
-                                            installation.saveInBackground();*/
-
-
                                         } else if (e != null) {
                                             Toast.makeText(LoginActivity.this, "There was a problem creating your account.", Toast.LENGTH_SHORT).show();
                                             e.printStackTrace();
@@ -368,11 +362,30 @@ public class LoginActivity extends ActionBarActivity implements
                     public void onCancelled(FirebaseError firebaseError) {
                     }
                 });
+/*
 
-                //go to main activity
-                Intent intent = new Intent(mContext, MainActivity.class);
-                startActivityForResult(intent, RC_GOOGLE_LOGOUT);
-                //moveTaskToBack(true);
+                //get parse push intents (remember to keep this in on rsume or else, it wont get the intents from the notification)
+                //DON"T PUT IT IN THE ONCREATE!
+                Intent intent = getIntent();
+                Bundle extras = intent.getExtras();
+                if (extras != null) {
+                    Boolean isNotification = extras.getBoolean("messageNotification");
+                    if (isNotification) {
+                        //otherwise,
+                        intent.setClass(mContext, MainActivity.class); //redirect the intent
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivityForResult(intent, RC_GOOGLE_LOGOUT);
+                    }
+                }
+
+*/
+                //else {
+                //there's no data, so this means it's the very first time
+                    Intent intent = new Intent(mContext, MainActivity.class); //create a new intent
+                    startActivityForResult(intent, RC_GOOGLE_LOGOUT);
+                //}
+
+
 
             } else {
                 Log.e(TAG, "Invalid provider: " + authData.getProvider());
@@ -404,5 +417,20 @@ public class LoginActivity extends ActionBarActivity implements
                 mGoogleApiClient.connect();
             }
         }
+    }
+
+    @Override
+    protected void onNewIntent (Intent intent) {
+        super.onNewIntent(intent);
+        // getIntent() should always return the most recent
+        setIntent(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+
     }
 }

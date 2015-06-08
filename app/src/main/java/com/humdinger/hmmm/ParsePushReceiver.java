@@ -65,27 +65,17 @@ public class ParsePushReceiver extends ParsePushBroadcastReceiver {
         }
         //if it's in NORMAL, then also turn on notification sound
         if(audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL){
-            //get default notifification sound
+            //get default notification sound
             mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
         }
 
-
-
         Intent resultIntent = new Intent(context, MainActivity.class);
-        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         resultIntent.putExtra("messageNotification", true);
         resultIntent.putExtra("senderUid", senderUid);
 
-
-/*
-        // Creates an explicit intent for an Activity in your app
-        Intent resultIntent = new Intent(context, MainActivity.class);
-
-        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);*/
-
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
         mBuilder.setContentIntent(resultPendingIntent);
-
 
         // allows you to update the notification later on. oh and notify the user, it'll keep updating the same notification btw which is good!
         NotificationManager mNotificationManager =

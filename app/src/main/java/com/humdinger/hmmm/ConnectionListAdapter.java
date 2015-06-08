@@ -234,11 +234,16 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
 
     public int getPosition(String senderUid) {
         int position = 0;
-        for (ConnectionListItem i : mConnectionListItems) {
-            if (i.getMatchUid().equals(senderUid)) {
-                break;
+
+        if (mConnectionListItems.size() != 0) {
+            for (ConnectionListItem i : mConnectionListItems) {
+                if (i.getMatchUid().equals(senderUid)) {
+                    break;
+                }
+                position++;
             }
-            position++;
+        }else {
+            position = -1;
         }
 
         return position;

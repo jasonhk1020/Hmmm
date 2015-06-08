@@ -259,7 +259,14 @@ public class TabChat extends BackHandledFragment {
             int position = mConnectionListAdapter.getPosition(senderUid);
 
             //go to the chat!
-            mRecyclerView.findViewHolderForAdapterPosition(position).itemView.performClick();
+            if (position != -1) {
+                mRecyclerView.findViewHolderForAdapterPosition(position).itemView.performClick();
+            }
+
+            //clear the intent
+            intent.removeExtra("senderUid");
+            intent.removeExtra("messageNotification");
+
         }
 
         super.onResume();

@@ -90,7 +90,8 @@ public class TabProfile extends Fragment {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
+                //log out by going back to login page
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
                 getActivity().setResult(getActivity().RESULT_OK, intent);
                 getActivity().finish();
             }
