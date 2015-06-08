@@ -3,7 +3,6 @@ package com.humdinger.hmmm;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,20 +50,36 @@ public class MainActivity extends ActionBarActivity implements BackHandledFragme
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
 
-        //track how many times app has been opened
+        //track how many times app has been opened and handling push callbacks to this activity
         PushService.setDefaultPushCallback(this, MainActivity.class);
         ParseAnalytics.trackAppOpened(getIntent());
+    }
+    @Override
+    protected void onNewIntent (Intent intent) {
+        super.onNewIntent(intent);
+        // getIntent() should always return the most recent
+        setIntent(intent);
+    }
 
-        //get parse push intents
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //get parse push intents (remember to keep this in on rsume or else, it wont get the intents from the notification)
+        //DON"T PUT IT IN THE ONCREATE!
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            String jsonData = extras.getString( "com.parse.Data" );
-            if (jsonData != null) {
+            Boolean isNotification = extras.getBoolean("messageNotification");
+            if (isNotification) {
+
+                //go to the chat page and open the user chat message
                 pager.setCurrentItem(1);
             }
         }
+
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

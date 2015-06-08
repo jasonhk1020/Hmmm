@@ -1,6 +1,7 @@
 package com.humdinger.hmmm;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -122,6 +123,7 @@ public class TabChat extends BackHandledFragment {
                                                     mConnectionListAdapter.addItem(mConnectionListItem);
                                                 }
 
+                                                break;
                                             }
                                         }
 
@@ -246,4 +248,21 @@ public class TabChat extends BackHandledFragment {
             return true;
         }
     }
+
+    @Override
+    public void onResume() {
+
+        Intent intent = getActivity().getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            String senderUid = extras.getString("senderUid");
+            int position = mConnectionListAdapter.getPosition(senderUid);
+
+            //go to the chat!
+            mRecyclerView.findViewHolderForAdapterPosition(position).itemView.performClick();
+        }
+
+        super.onResume();
+    }
+
 }

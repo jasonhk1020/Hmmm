@@ -168,7 +168,12 @@ public class LoginActivity extends ActionBarActivity implements
 
                 if (resultCode == RESULT_OK) {
                     if (this.mAuthData != null) {
+                        mAuthProgressDialog.show();
+
+                        //disconnect from firebase
                         mFirebaseRef.unauth();
+
+                        //disconnect from google
                         if (this.mAuthData.getProvider().equals("google")) {
                             if (mGoogleApiClient.isConnected()) {
                                 //logout and forget user
@@ -179,11 +184,15 @@ public class LoginActivity extends ActionBarActivity implements
                                             public void onResult(Status status) {
                                                 Log.e(TAG, "User access revoked!");
                                                 mGoogleApiClient.disconnect(); //this might be redundant
-                                                mAuthProgressDialog.show();
+                                                mAuthProgressDialog.hide();
                                             }
                                         });
                             }
                         }
+
+                        //disconnect from parse
+                        ParseUser.logOut();
+
                     }
                 } else {
                     mGoogleLoginClicked = true;
@@ -251,10 +260,10 @@ public class LoginActivity extends ActionBarActivity implements
                                         if (user != null && e == null) {
                                             Log.i(TAG, "The Google user validated");
 
-                                            // Associate the device with a user
+/*                                            // Associate user to session
                                             ParseInstallation installation = ParseInstallation.getCurrentInstallation();
                                             installation.put("user",user);
-                                            installation.saveInBackground();
+                                            installation.saveInBackground();*/
 
 
                                         } else if (e != null) {
@@ -273,11 +282,6 @@ public class LoginActivity extends ActionBarActivity implements
                             }
                         }
                     });
-
-
-
-
-
 
                     token = null;
                 } else if (errorMessage != null) {
@@ -364,8 +368,6 @@ public class LoginActivity extends ActionBarActivity implements
                     public void onCancelled(FirebaseError firebaseError) {
                     }
                 });
-
-
 
                 //go to main activity
                 Intent intent = new Intent(mContext, MainActivity.class);

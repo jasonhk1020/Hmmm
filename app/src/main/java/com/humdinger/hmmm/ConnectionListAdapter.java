@@ -2,6 +2,7 @@ package com.humdinger.hmmm;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -231,6 +232,18 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
         return mConnectionListItems.size();
     }
 
+    public int getPosition(String senderUid) {
+        int position = 0;
+        for (ConnectionListItem i : mConnectionListItems) {
+            if (i.getMatchUid().equals(senderUid)) {
+                break;
+            }
+            position++;
+        }
+
+        return position;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView usernameText;
@@ -284,10 +297,16 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
             roomRef.push().setValue(chat);
             inputText.setText("");
 
+            //get user info
+            SharedPreferences prefs = mContext.getSharedPreferences("userPrefs", 0);
+            String uid = prefs.getString("uid", null);
+
+            String fixedMatchUid = matchUid.replace("google:","");
             HashMap<String, Object> params = new HashMap<String, Object>();
-            params.put("message", input);
-            params.put("uid",matchUid);
-            params.put("username",mUsername);
+            params.put("message", input); //the message
+            params.put("uid",fixedMatchUid); //the person to send too, uid adjusted to remove the google:
+            params.put("username",mUsername); //from name
+            params.put("senderUid", uid); //from uid full with google
             ParseCloud.callFunctionInBackground("notification", params, new FunctionCallback<String>() {
                 @Override
                 public void done(String result, ParseException e) {
