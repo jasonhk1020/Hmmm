@@ -22,6 +22,11 @@ import android.graphics.drawable.Drawable;
 public class CardModel {
 
 	private String uid;
+    private String username;
+    private CharSequence info;
+    private String description;
+    private String photoUrl;
+
 	private Drawable cardLikeImageDrawable;
 	private Drawable cardDislikeImageDrawable;
 
@@ -37,12 +42,12 @@ public class CardModel {
         void OnClickListener();
     }
 
-	public CardModel() {
-		this(null);
-	}
-
-	public CardModel(String uid) {
+    public CardModel(String uid, String username, CharSequence info, String description, String photoUrl) {
 		this.uid = uid;
+        this.username = username;
+        this.info = info;
+        this.description = description;
+        this.photoUrl = photoUrl;
 	}
 
 	public String getUid() {
@@ -52,6 +57,39 @@ public class CardModel {
 	public void setUid(String uid) {
 		this.uid = uid;
 	}
+
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public CharSequence getInfo() {
+        return info;
+    }
+
+    public void setInfo(CharSequence info) {
+        this.info = info;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
 
 	public Drawable getCardLikeImageDrawable() {
 		return cardLikeImageDrawable;

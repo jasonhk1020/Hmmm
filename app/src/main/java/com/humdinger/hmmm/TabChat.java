@@ -272,4 +272,11 @@ public class TabChat extends BackHandledFragment {
         super.onResume();
     }
 
+/*    @Override
+    public void onStop() {
+        super.onStop();
+        mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
+        mChatListAdapter.cleanup();
+    }*/
+
 }

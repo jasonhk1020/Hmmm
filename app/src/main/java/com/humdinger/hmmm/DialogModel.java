@@ -21,12 +21,18 @@ public class DialogModel {
 
 	private String uid;
     private String matchUid;
+    private String matchUsername;
+    private CharSequence matchInfo;
+    private String matchDescription;
+    private String matchPhotoUrl;
 
-
-
-    public DialogModel(String uid, String matchUid) {
+    public DialogModel(String uid, String matchUid, String matchUsername, CharSequence matchInfo, String matchDescription, String matchPhotoUrl) {
 		this.uid = uid;
         this.matchUid = matchUid;
+        this.matchUsername = matchUsername;
+        this.matchInfo = matchInfo;
+        this.matchDescription = matchDescription;
+        this.matchPhotoUrl = matchPhotoUrl;
 	}
 
     public String getUid() {
@@ -43,6 +49,38 @@ public class DialogModel {
 
     public void setMatchUid(String matchUid) {
         this.matchUid = matchUid;
+    }
+
+    public String getMatchUsername() {
+        return matchUsername;
+    }
+
+    public void setMatchUsername(String matchUsername) {
+        this.matchUsername = matchUsername;
+    }
+
+    public CharSequence getMatchInfo() {
+        return matchInfo;
+    }
+
+    public void setMatchInfo(CharSequence matchInfo) {
+        this.matchInfo = matchInfo;
+    }
+
+    public String getMatchDescription() {
+        return matchDescription;
+    }
+
+    public void setMatchDescription(String matchDescription) {
+        this.matchDescription = matchDescription;
+    }
+
+    public String getMatchPhotoUrl() {
+        return matchPhotoUrl;
+    }
+
+    public void setMatchPhotoUrl(String matchPhotoUrl) {
+        this.matchPhotoUrl = matchPhotoUrl;
     }
 
 }

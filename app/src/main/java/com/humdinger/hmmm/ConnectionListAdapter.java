@@ -69,6 +69,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
         this.mUsername = mUsername;
     }
 
+
     @Override
     public ConnectionListAdapter.ViewHolder onCreateViewHolder(final ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(mContext).inflate(R.layout.connection_list_item, viewGroup, false);

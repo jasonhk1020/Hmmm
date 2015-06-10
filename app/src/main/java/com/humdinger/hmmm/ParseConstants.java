@@ -8,6 +8,7 @@ public final class ParseConstants {
 
     // Field names
     public static final int ID_MESSAGE = 1001;
+    public static final String ID_NOTIFICATION_GROUP = "ID_NOTIFICATION_GROUP";
 
     //
 

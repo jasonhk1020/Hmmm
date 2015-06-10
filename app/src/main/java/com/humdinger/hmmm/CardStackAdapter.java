@@ -130,7 +130,7 @@ public abstract class CardStackAdapter extends BaseCardStackAdapter {
 		return mContext;
 	}
 
-    public boolean exists(CardModel item) {
+/*    public boolean exists(CardModel item) {
         boolean found = false;
         for (CardModel i : mData) {
             if (i.getUid() != null) {
@@ -139,7 +139,30 @@ public abstract class CardStackAdapter extends BaseCardStackAdapter {
                 }
             }
         }
-
         return found;
+    }*/
+
+    public boolean exists(String uid) {
+        boolean found = false;
+        for (CardModel i : mData) {
+            if (i.getUid() != null) {
+                if (i.getUid().equals(uid)) {
+                    found = true;
+                }
+            }
+        }
+        return found;
+    }
+
+    public void update(CardModel item) {
+        synchronized (mLock) {
+            for (int i = 0 ; i < mData.size(); i++) {
+                if(mData.get(i).getUid().equals(item.getUid())) {
+                    mData.set(i, item);
+                    break;
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 }

@@ -3,10 +3,6 @@ package com.humdinger.hmmm;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.Toolbar;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.TextUtils;
-import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,10 +13,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,13 +46,7 @@ public final class DialogAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View v, ViewGroup parent) {
-		/*
-        FrameLayout wrapper = new FrameLayout(mContext);
-        wrapper.setBackgroundResource(R.drawable.card_bg);
-        FrameLayout innerWrapper = new FrameLayout(mContext);
-        innerWrapper.setBackgroundColor(mContext.getResources().getColor(R.color.card_bg));
-        wrapper.addView(innerWrapper);
-*/
+
         LayoutInflater inflater = LayoutInflater.from(getContext());
         v = inflater.inflate(R.layout.empty, parent, false);
 
@@ -77,64 +65,13 @@ public final class DialogAdapter extends BaseAdapter {
         final TextView positionCompanyIndustryText = (TextView) dialog.findViewById(R.id.match_dialog_position_company_industry);
         final TextView descriptionText = (TextView) dialog.findViewById(R.id.match_dialog_description);
 
+        //set the contents of the view
         if(model.getUid() != null) {
-            //update views with info
-            Firebase matchRef = new Firebase(getContext().getResources().getString(R.string.FIREBASE_URL)).child("users").child(model.getMatchUid());
-            matchRef.addValueEventListener(new ValueEventListener() {
-                // Retrieve new posts as they are added to Firebase
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-
-                    //retrieve current user info from firebase
-                    Map<String, String> map = (HashMap<String, String>) snapshot.getValue();
-                    String username = removeNull(map.get("username"));
-                    String position = removeNull(map.get("position"));
-                    String company = removeNull(map.get("company"));
-                    String industry = removeNull(map.get("industry"));
-                    String description = removeNull(map.get("description"));
-                    String photoUrl = removeNull(map.get("photoUrl"));
-
-                    //position company and industry into sentence
-                    Spannable sPosition = new SpannableString("");
-                    Spannable sCompany = new SpannableString("");
-                    Spannable sIndustry = new SpannableString("");
-
-                    //logic for adding conjunctions and bolding
-                    if (!position.equals("")) {
-                        sPosition = new SpannableString(position);
-                        sPosition.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sPosition.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    }
-                    if (!company.equals("")) {
-                        if (!position.equals("")) {
-                            sCompany = new SpannableString(" at " + company);
-                            sCompany.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 4, sCompany.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        } else {
-                            sCompany = new SpannableString(company);
-                            sCompany.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sCompany.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        }
-                    }
-                    if (!industry.equals("")) {
-                        if (!position.equals("") || !company.equals("")) {
-                            sIndustry = new SpannableString(" in " + industry);
-                            sIndustry.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 4, sIndustry.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        } else {
-                            sIndustry = new SpannableString(industry);
-                            sIndustry.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sIndustry.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        }
-                    }
-
-                    //set the contents of the view
-                    new LoadProfileImage(imageView).execute(photoUrl);
-                    usernameText.setText(removeNull(username));
-                    positionCompanyIndustryText.setText(TextUtils.concat(sPosition, sCompany, sIndustry));
-                    descriptionText.setText(removeNull(description));
-                    dialog.show();
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-                }
-            });
+            new LoadProfileImage(imageView).execute(model.getMatchPhotoUrl());
+            usernameText.setText(model.getMatchUsername());
+            positionCompanyIndustryText.setText(model.getMatchInfo());
+            descriptionText.setText(model.getMatchDescription());
+            dialog.show();
         }
 
         //add match toolbar
@@ -210,6 +147,18 @@ public final class DialogAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void update(DialogModel item) {
+        synchronized (mLock) {
+            for (int i = 0; i < mData.size(); i++) {
+                if (mData.get(i).getMatchUid().equals(item.getMatchUid())) {
+                    mData.set(i, item);
+                    break;
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
 	@Override
 	public Object getItem(int position) {
 		return getDialogModel(position);
@@ -236,11 +185,24 @@ public final class DialogAdapter extends BaseAdapter {
         return string;
     }
 
-    public boolean exists(DialogModel item) {
+/*    public boolean exists(DialogModel item) {
         boolean found = false;
         for (DialogModel i : mData) {
             if (i.getUid() != null) {
                 if (i.getUid().equals(item.getUid())) {
+                    found = true;
+                }
+            }
+        }
+
+        return found;
+    }*/
+
+    public boolean exists(String uid) {
+        boolean found = false;
+        for (DialogModel i : mData) {
+            if (i.getUid() != null) {
+                if (i.getUid().equals(uid)) {
                     found = true;
                 }
             }
