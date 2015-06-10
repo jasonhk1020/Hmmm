@@ -30,6 +30,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.plus.Plus;
 import com.parse.FunctionCallback;
 import com.parse.LogInCallback;
+import com.parse.LogOutCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
@@ -168,7 +169,10 @@ public class LoginActivity extends ActionBarActivity implements
 
                 if (resultCode == RESULT_OK) {
                     if (this.mAuthData != null) {
-                        mAuthProgressDialog.show();
+                        final ProgressDialog newDialog = new ProgressDialog(this);
+                        newDialog.setTitle("Loading");
+                        newDialog.setCancelable(false);
+                        newDialog.show();
 
                         //disconnect from firebase
                         mFirebaseRef.unauth();
@@ -184,15 +188,20 @@ public class LoginActivity extends ActionBarActivity implements
                                             public void onResult(Status status) {
                                                 Log.e(TAG, "User access revoked!");
                                                 mGoogleApiClient.disconnect(); //this might be redundant
-                                                mAuthProgressDialog.hide();
+
+                                                //disconnect from parse
+                                                ParseUser.logOutInBackground(new LogOutCallback() {
+                                                    @Override
+                                                    public void done(ParseException e) {
+                                                        if (e == null) {
+                                                            newDialog.hide();
+                                                        }
+                                                    }
+                                                });
                                             }
                                         });
                             }
                         }
-
-                        //disconnect from parse
-                        ParseUser.logOut();
-
                     }
                 } else {
                     mGoogleLoginClicked = true;
@@ -429,8 +438,5 @@ public class LoginActivity extends ActionBarActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-
-
-
     }
 }

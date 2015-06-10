@@ -37,7 +37,7 @@ public class TabProfile extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View v =inflater.inflate(R.layout.tab_profile,container,false);
+        v =inflater.inflate(R.layout.tab_profile,container,false);
 
         //get uid to locate user information on firebase
         prefs = this.getActivity().getSharedPreferences("userPrefs", 0);
@@ -99,7 +99,7 @@ public class TabProfile extends Fragment {
 
         return v;
     }
-    private void setEditText(final String field, final String initialValue, final int id, final View v) {
+    private void setEditText(final String field, final String initialValue, final int id, View v) {
         final EditText editText = (EditText) v.findViewById(id);
         editText.setText(initialValue, TextView.BufferType.EDITABLE);
         if (!initialValue.equals("")) {

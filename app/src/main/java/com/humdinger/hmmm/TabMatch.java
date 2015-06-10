@@ -42,10 +42,12 @@ public class TabMatch extends Fragment {
     private SharedPreferences prefs;
     private String mUsername;
     private String uid;
+    private TextView textView;
+    private View v;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.tab_match,container,false);
+        v = inflater.inflate(R.layout.tab_match,container,false);
 
         //get the user shared preferences
         prefs = getActivity().getSharedPreferences("userPrefs", 0);
@@ -53,7 +55,7 @@ public class TabMatch extends Fragment {
         uid = prefs.getString("uid", null);
 
         //setup text view
-        TextView textView = (TextView) v.findViewById(R.id.match_empty_message);
+        textView = (TextView) v.findViewById(R.id.match_empty_message);
 
         //create the card container
         mCardContainer = (CardContainer) v.findViewById(R.id.match_card_layout);
@@ -309,9 +311,9 @@ public class TabMatch extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-
-        //loop through each person that's still on the list and remove the listener
         queryRef.removeEventListener(queryRefListener);
+
+        //we should also loop through each active match and removeeventlistener
     }
 
     private String RemoveNull(String string) {

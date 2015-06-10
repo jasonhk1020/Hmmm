@@ -9,6 +9,13 @@
         <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\support-annotations-22.1.1-d513078ce9974b71179ef3871712260855159bb0.jar" />
     </item>
     <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\libs\json-simple-1.1.1.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="5d6f9b6a9ddca2a28c0216cc44efb2e20d9c23b5">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\json-simple-1.1.1-ef3e532c695d35733175f686130a4c700b9d0bf9.jar" />
+    </item>
+    <item
         jar="C:\Users\jasonhk1020\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.2.2\d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b\jackson-core-2.2.2.jar"
         jumboMode="false"
         revision="22.0.0"
@@ -79,18 +86,18 @@
         <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\firebase-client-android-2.2.3-e5b3e71d61ed1f4038b6a4c62b91c75ba60aeee0.jar" />
     </item>
     <item
-        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.1\libs\internal_impl-22.1.1.jar"
-        jumboMode="false"
-        revision="22.0.0"
-        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
-        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\internal_impl-22.1.1-bc3a85afaf3c7867fe23020ac542cddef997c7cb.jar" />
-    </item>
-    <item
         jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-location\7.3.0\classes.jar"
         jumboMode="false"
         revision="22.0.0"
         sha1="b2c07cdb814fe988ad05f7b4d767a841514a5991">
         <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\classes-4a8c15ea3bbaea2352fd3c5889863a344199bfcf.jar" />
+    </item>
+    <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.1\libs\internal_impl-22.1.1.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\internal_impl-22.1.1-bc3a85afaf3c7867fe23020ac542cddef997c7cb.jar" />
     </item>
     <item
         jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-wearable\7.3.0\classes.jar"

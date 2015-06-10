@@ -42,26 +42,14 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
     private RecyclerView mRecyclerView;
     private ArrayList<ConnectionListItem> mConnectionListItems = new ArrayList<ConnectionListItem>();
     private Firebase roomRef;
+    private ChatListAdapter mChatListAdapter;
 
     private ListView chatView;
     private EditText inputText;
     private ImageButton inputButton;
     private RelativeLayout messageBar;
     private TextView matchText;
-
-    public void addItem(ConnectionListItem item) {
-        mConnectionListItems.add(0, item);
-        notifyItemInserted(0);
-    }
-
-    public void removeItem(int position) {
-        mConnectionListItems.remove(position);
-        notifyItemRemoved(position);
-    }
-
-    public ArrayList<ConnectionListItem> getList() {
-        return mConnectionListItems;
-    }
+    private Firebase matchRef;
 
     public ConnectionListAdapter(Context context, RecyclerView recyclerView, String mUsername) {
         this.mContext = context;
@@ -86,7 +74,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
 
                 //set the chat room and attach to adapter
                 roomRef = new Firebase(mContext.getResources().getString(R.string.FIREBASE_URL)).child("chat").child(mRoom);
-                final ChatListAdapter mChatListAdapter = new ChatListAdapter(roomRef, ((Activity)mContext), R.layout.chat_message, mUsername);
+                mChatListAdapter = new ChatListAdapter(roomRef, ((Activity)mContext), R.layout.chat_message, mUsername);
 
                 //fill the chatview
                 chatView = (ListView) ((Activity)mContext).findViewById(R.id.chatView);
@@ -103,7 +91,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                 matchText = (TextView) ((Activity)mContext).findViewById(R.id.chat_matchUsername);
 
                 //need to ask firebase for the match's username!
-                Firebase matchRef = new Firebase(mContext.getResources().getString(R.string.FIREBASE_URL)).child("users").child(connectionListItem.getMatchUid()).child("username");
+                matchRef = new Firebase(mContext.getResources().getString(R.string.FIREBASE_URL)).child("users").child(connectionListItem.getMatchUid()).child("username");
                 //just once
                 matchRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -228,6 +216,8 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
         });
     }
 
+
+
     @Override
     public int getItemCount() {
         return mConnectionListItems.size();
@@ -275,6 +265,24 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
         }
     }
 
+    public void addItem(ConnectionListItem item) {
+        mConnectionListItems.add(0, item);
+        notifyItemInserted(0);
+    }
+
+    public void removeItem(int position) {
+        mConnectionListItems.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public ChatListAdapter getChatListAdapter() {
+        return this.mChatListAdapter;
+    }
+
+    public ArrayList<ConnectionListItem> getList() {
+        return mConnectionListItems;
+    }
+
     public void setInvisible(boolean mBoolean) {
         if (mBoolean) {
             //show the connections list
@@ -307,6 +315,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
             SharedPreferences prefs = mContext.getSharedPreferences("userPrefs", 0);
             String uid = prefs.getString("uid", null);
 
+            //send data to parse
             String fixedMatchUid = matchUid.replace("google:","");
             HashMap<String, Object> params = new HashMap<String, Object>();
             params.put("message", input); //the message
