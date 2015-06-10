@@ -113,7 +113,6 @@ public class TabMatch extends Fragment {
                             Map<String, Object> map = new HashMap<String, Object>();
                             map.put(card.getUid(), true);
 
-
                             Firebase myRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("connections").child(uid);
                             myRef.updateChildren(map);
                         }
@@ -305,8 +304,6 @@ public class TabMatch extends Fragment {
             public void onCancelled(FirebaseError firebaseError) {
             }
         });
-
-
     }
 
     @Override
