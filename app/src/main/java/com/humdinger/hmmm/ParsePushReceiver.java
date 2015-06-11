@@ -4,6 +4,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -26,11 +28,15 @@ public class ParsePushReceiver extends ParsePushBroadcastReceiver {
             String sender = "from who";
             String message = "what did they say?";
             String senderUid = "googlewhat?";
-            if (json.has("sender")) {
+            String matchMessage = "Hey!";
+            if (json.has("message")) {
                 sender = json.getString("sender");
                 message = json.getString("message");
                 senderUid = json.getString("senderUid");
                 generateMessageNotification(context, sender, message, senderUid);
+            } else if (json.has("requestSender")) {
+                matchMessage = json.getString("requestSender") + " would like to connect.";
+                generateRequestNotification(context, matchMessage);
             }
 
         } catch (Exception e) {
@@ -39,6 +45,9 @@ public class ParsePushReceiver extends ParsePushBroadcastReceiver {
     }
 
     public static void generateMessageNotification(Context context, String sender, String message, String senderUid) {
+
+        Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
+
         // build the message notification
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
@@ -51,7 +60,26 @@ public class ParsePushReceiver extends ParsePushBroadcastReceiver {
         //for now no notification sounds and vibrates.
         mBuilder.setDefaults(0);
 
-/*
+        //setup intent and pending intent
+        Intent resultIntent = new Intent(context, MainActivity.class);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        resultIntent.putExtra("messageNotification", true);
+        resultIntent.putExtra("senderUid", senderUid);
+
+        String temp = senderUid.substring(22);
+        int notificationId = Integer.parseInt(temp);
+
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        // allows you to update the notification later on. oh and notify the user, it'll keep updating the same notification btw which is good!
+        NotificationManager mNotificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+        mNotificationManager.notify(notificationId, mBuilder.build());
+
+        /*
         //set default sound and vibrate
         mBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE); //set defaults
 
@@ -71,10 +99,30 @@ public class ParsePushReceiver extends ParsePushBroadcastReceiver {
             mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
         }
 */
+    }
+
+    public static void generateRequestNotification(Context context, String matchMessage) {
+
+        Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
+
+        // build the message notification
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.mipmap.ic_launcher) //launcher icon
+                        .setContentTitle("Hello!") //sender name as title
+                        .setContentText(matchMessage) //sender message as title
+                        .setAutoCancel(true)  //autocancel on click
+                        .setGroup(ParseConstants.ID_NOTIFICATION_GROUP); //group notifications
+
+        //for now no notification sounds and vibrates.
+        mBuilder.setDefaults(0);
+
+        //setup intent and pending intent
         Intent resultIntent = new Intent(context, MainActivity.class);
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        resultIntent.putExtra("messageNotification", true);
-        resultIntent.putExtra("senderUid", senderUid);
+        resultIntent.putExtra("requestNotification", true);
+
+        int notificationId = ParseConstants.ID_REQUEST;
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
         mBuilder.setContentIntent(resultPendingIntent);
@@ -82,6 +130,7 @@ public class ParsePushReceiver extends ParsePushBroadcastReceiver {
         // allows you to update the notification later on. oh and notify the user, it'll keep updating the same notification btw which is good!
         NotificationManager mNotificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(senderUid, ParseConstants.ID_MESSAGE, mBuilder.build());
+        mNotificationManager.notify(notificationId, mBuilder.build());
+
     }
 }

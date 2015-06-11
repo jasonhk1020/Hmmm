@@ -84,6 +84,26 @@ public abstract class CardStackAdapter extends BaseCardStackAdapter {
         notifyDataSetChanged();
     }
 
+    public void remove(String uid) {
+        synchronized (mLock) {
+            boolean found = false;
+            CardModel removeCard = null;
+            for (CardModel i : mData) {
+                if (i.getUid() != null) {
+                    if (i.getUid().equals(uid)) {
+                        found = true;
+                        removeCard = i;
+                        break;
+                    }
+                }
+            }
+            if (found) {
+                mData.remove(removeCard);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
     public void moveToTop(CardModel item) {
         synchronized (mLock) {
             //remove item
@@ -130,7 +150,7 @@ public abstract class CardStackAdapter extends BaseCardStackAdapter {
 		return mContext;
 	}
 
-/*    public boolean exists(CardModel item) {
+    public boolean exists(CardModel item) {
         boolean found = false;
         for (CardModel i : mData) {
             if (i.getUid() != null) {
@@ -140,7 +160,7 @@ public abstract class CardStackAdapter extends BaseCardStackAdapter {
             }
         }
         return found;
-    }*/
+    }
 
     public boolean exists(String uid) {
         boolean found = false;

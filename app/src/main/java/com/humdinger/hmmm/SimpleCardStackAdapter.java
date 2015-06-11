@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 public final class SimpleCardStackAdapter extends CardStackAdapter {
 
 	public SimpleCardStackAdapter(Context mContext) {
@@ -29,7 +31,9 @@ public final class SimpleCardStackAdapter extends CardStackAdapter {
 
         if(model.getUid() != null) {
             //set the contents of the view
-            new LoadProfileImage(imageView).execute(model.getPhotoUrl());
+            //new LoadProfileImage(imageView).execute(model.getPhotoUrl());
+
+            Picasso.with(getContext()).load(model.getPhotoUrl()).fit().into(imageView);
             usernameView.setText(model.getUsername());
             positionCompanyIndustryView.setText(model.getInfo());
             descriptionView.setText(model.getDescription());

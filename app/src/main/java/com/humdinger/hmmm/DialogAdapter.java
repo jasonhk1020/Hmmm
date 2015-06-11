@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -67,7 +68,8 @@ public final class DialogAdapter extends BaseAdapter {
 
         //set the contents of the view
         if(model.getUid() != null) {
-            new LoadProfileImage(imageView).execute(model.getMatchPhotoUrl());
+            //new LoadProfileImage(imageView).execute(model.getMatchPhotoUrl());
+            Picasso.with(getContext()).load(model.getMatchPhotoUrl()).fit().into(imageView);
             usernameText.setText(model.getMatchUsername());
             positionCompanyIndustryText.setText(model.getMatchInfo());
             descriptionText.setText(model.getMatchDescription());
@@ -185,7 +187,7 @@ public final class DialogAdapter extends BaseAdapter {
         return string;
     }
 
-/*    public boolean exists(DialogModel item) {
+    public boolean exists(DialogModel item) {
         boolean found = false;
         for (DialogModel i : mData) {
             if (i.getUid() != null) {
@@ -194,9 +196,8 @@ public final class DialogAdapter extends BaseAdapter {
                 }
             }
         }
-
         return found;
-    }*/
+    }
 
     public boolean exists(String uid) {
         boolean found = false;

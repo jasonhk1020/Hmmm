@@ -196,17 +196,20 @@ public class TabChat extends BackHandledFragment {
         Intent intent = getActivity().getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            String senderUid = extras.getString("senderUid");
-            int position = mConnectionListAdapter.getPosition(senderUid);
+            Boolean isMessageNotification = extras.getBoolean("messageNotification");
+            if (isMessageNotification) {
+                String senderUid = extras.getString("senderUid");
+                int position = mConnectionListAdapter.getPosition(senderUid);
 
-            //go to the chat!
-            if (position != -1) {
-                mRecyclerView.findViewHolderForAdapterPosition(position).itemView.performClick();
+                //go to the chat!
+                if (position != -1) {
+                    mRecyclerView.findViewHolderForAdapterPosition(position).itemView.performClick();
+                }
+
+                //clear the intent
+                intent.removeExtra("senderUid");
+                intent.removeExtra("messageNotification");
             }
-
-            //clear the intent
-            intent.removeExtra("senderUid");
-            intent.removeExtra("messageNotification");
 
         }
 
@@ -220,7 +223,10 @@ public class TabChat extends BackHandledFragment {
         queryRef.removeEventListener(queryRefListener);
 
         //remove the chatlist adapter since everytime you click the chat, a new listener will start, might as well stop them after each enter
-        mConnectionListAdapter.getChatListAdapter().cleanup();
+        if (mConnectionListAdapter.getChatListAdapter() != null) {
+            mConnectionListAdapter.getChatListAdapter().cleanup();
+        }
+
     }
 
     @Override

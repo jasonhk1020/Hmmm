@@ -70,11 +70,13 @@ public class MainActivity extends ActionBarActivity implements BackHandledFragme
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            Boolean isNotification = extras.getBoolean("messageNotification");
-            if (isNotification) {
-
+            Boolean isMessageNotification = extras.getBoolean("messageNotification");
+            Boolean isRequestNotification = extras.getBoolean("requestNotification");
+            if (isMessageNotification) {
                 //go to the chat page and open the user chat message
                 pager.setCurrentItem(1);
+            } else if (isRequestNotification) {
+                pager.setCurrentItem(0);
             }
         }
 

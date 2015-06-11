@@ -23,6 +23,9 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -117,6 +120,22 @@ public class TabMatch extends Fragment {
 
                             Firebase myRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("connections").child(uid);
                             myRef.updateChildren(map);
+
+                            //also send them a notification
+                            //send data to parse
+                            String fixedMatchUid = card.getUid().replace("google:","");
+                            HashMap<String, Object> params = new HashMap<String, Object>();
+                            params.put("uid",fixedMatchUid); //the person to send too, uid adjusted to remove the google:
+                            params.put("username",mUsername); //from name
+                            params.put("senderUid", uid); //from uid full with google
+                            ParseCloud.callFunctionInBackground("requestNotification", params, new FunctionCallback<String>() {
+                                @Override
+                                public void done(String result, ParseException e) {
+                                    if (e == null) {
+                                        // result is "Hello world!"
+                                    }
+                                }
+                            });
                         }
                         return true;
                     case R.id.action_match_settings:
@@ -261,8 +280,16 @@ public class TabMatch extends Fragment {
                                                                     //they do exist, so let's not bother you once more and also, let's turn off this listener
                                                                     matchRef.removeEventListener(getListener());
                                                                 } else {
-                                                                    //they don't exist in your connections (no true or false value) so you should add them for dialog
-                                                                    dialogAdapter.add(dialogModel);
+                                                                    //they don't exist in your connections (no true or false value)
+
+                                                                    //first check if data is already in the dialogAdapter
+                                                                    if(!dialogAdapter.exists(dialogModel)) {
+                                                                        //so you should add them for dialog
+                                                                        dialogAdapter.add(dialogModel);
+                                                                    }
+
+                                                                    //let's check if data is in the adapter if it is, we should remove it. ??? I FORGOT WHAT THIS MEANS...sigh
+
                                                                 }
                                                             }
                                                             @Override
@@ -291,7 +318,98 @@ public class TabMatch extends Fragment {
                 }
             }
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            public void onChildChanged(DataSnapshot connection, String s) {
+                //check to see what changed....
+
+                //first make sure it's not you
+                if(!connection.getKey().equals(uid)) {
+                    //for each person, check to see if you are NOT mentioned
+                    if (!connection.child(uid).exists()) {
+                        //YOU are not mentioned!
+                    } else { //since you do exist in their connections, probably means they said yes, but let's check anyways incase weird bug
+                        //check to see if they said yes to you
+                        if((Boolean) connection.child(uid).getValue()) {
+                            //since they said yes to you, check to see if you have NOT mentioned them
+
+                            //we'll check our list again once
+                            Firebase myRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("connections").child(uid);
+                            myRef.addListenerForSingleValueEvent(new CustomValueEventListener(connection.getKey()) {
+                                @Override
+                                public void onDataChange(DataSnapshot myConnections) {
+                                    //do they even exist in my connections?
+                                    if(!myConnections.child(getUid()).exists()) {
+                                        //since you have NOT mentioned them
+                                        //first check your dialog if they are on the list already
+                                        if(!dialogAdapter.exists(getUid())) {
+
+                                            //since they don't exist at this point, listen in on their data and update as data changes
+                                            final Firebase matchRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("users").child(getUid());
+                                            matchRef.addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot snapshot) {
+
+                                                    ValueEventListener theListener = this;
+                                                    // Retrieve new posts as they are added to Firebase
+                                                    Map<String, Object> map = FormatSnapshot(snapshot);
+
+                                                    //let's add them to the adapter for displaying a popup dialog (notification too later on)
+                                                    final DialogModel dialogModel = new DialogModel(
+                                                            uid,
+                                                            (String) map.get("uid"),
+                                                            (String) map.get("username"),
+                                                            (CharSequence) map.get("info"),
+                                                            (String) map.get("description"),
+                                                            (String) map.get("photoUrl"));
+
+                                                    //check if the item already exists in the adapter, if not let's add it
+                                                    if(!dialogAdapter.exists(snapshot.getKey())) {
+                                                        //since the match isnt in your dialog
+
+                                                        //check your connections again to see if they are in your connections now
+                                                        Firebase myLastRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("connections").child(uid);
+                                                        myLastRef.addListenerForSingleValueEvent(new CustomValueEventListener(snapshot.getKey(), theListener) {
+                                                            @Override
+                                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                //check to see if they exist in your connections one last time
+                                                                if (dataSnapshot.child(getUid()).exists()) {
+                                                                    //they do exist, so let's not bother you once more and also, let's turn off this listener
+                                                                    matchRef.removeEventListener(getListener());
+                                                                } else {
+                                                                    //they don't exist in your connections (no true or false value) so you should add them for dialog
+                                                                    dialogAdapter.add(dialogModel);
+
+                                                                    //also remove them from your match list if they are still on it.
+                                                                    if (adapter.exists(dialogModel.getMatchUid())){
+                                                                        adapter.remove(dialogModel.getMatchUid());
+                                                                    }
+
+                                                                }
+                                                            }
+                                                            @Override
+                                                            public void onCancelled(FirebaseError firebaseError) {
+                                                            }
+                                                        });
+
+                                                    } else {
+                                                        //replace contents because info was updated
+                                                        dialogAdapter.update(dialogModel);
+                                                    }
+                                                }
+                                                @Override
+                                                public void onCancelled(FirebaseError firebaseError) {
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                                @Override
+                                public void onCancelled(FirebaseError firebaseError) {
+                                }
+                            });
+                        }
+                    }
+                }
+
             }
 
             @Override

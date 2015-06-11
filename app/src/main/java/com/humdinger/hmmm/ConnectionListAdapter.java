@@ -322,7 +322,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
             params.put("uid",fixedMatchUid); //the person to send too, uid adjusted to remove the google:
             params.put("username",mUsername); //from name
             params.put("senderUid", uid); //from uid full with google
-            ParseCloud.callFunctionInBackground("notification", params, new FunctionCallback<String>() {
+            ParseCloud.callFunctionInBackground("messageNotification", params, new FunctionCallback<String>() {
                 @Override
                 public void done(String result, ParseException e) {
                     if (e == null) {

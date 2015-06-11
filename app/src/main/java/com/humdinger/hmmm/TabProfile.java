@@ -21,6 +21,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,7 +62,8 @@ public class TabProfile extends Fragment {
 
                 //profile image from google
                 ImageView imageView = (ImageView) v.findViewById(R.id.profile_image);
-                new LoadProfileImage(imageView).execute(photoUrl);
+                //new LoadProfileImage(imageView).execute(photoUrl);
+                Picasso.with(getActivity()).load(photoUrl).fit().into(imageView);
 
                 //username
                 TextView usernameText = (TextView) v.findViewById(R.id.profile_name);

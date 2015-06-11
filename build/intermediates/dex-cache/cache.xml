@@ -9,6 +9,13 @@
         <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\support-annotations-22.1.1-d513078ce9974b71179ef3871712260855159bb0.jar" />
     </item>
     <item
+        jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\libs\picasso-2.5.2.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\build\intermediates\pre-dexed\debug\picasso-2.5.2-92bcd994c629eefd2427bb310d43e8f79a868d16.jar" />
+    </item>
+    <item
         jar="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\libs\json-simple-1.1.1.jar"
         jumboMode="false"
         revision="22.0.0"
