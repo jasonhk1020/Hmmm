@@ -2,6 +2,7 @@ package com.humdinger.hmmm;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -16,6 +17,9 @@ import android.widget.TextView;
 
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -118,6 +122,28 @@ public final class DialogAdapter extends BaseAdapter {
                                 }
                             }
                         });
+
+                        //get the user shared preferences
+                        SharedPreferences prefs = getContext().getSharedPreferences("userPrefs", 0);
+                        String mUsername = prefs.getString("username", null);
+                        String uid = prefs.getString("uid", null);
+
+                        //also push a parse notification to them confirming that that they have accepted!
+                        String fixedMatchUid = model.getMatchUid().replace("google:", "");
+                        HashMap<String, Object> params = new HashMap<String, Object>();
+                        params.put("uid",fixedMatchUid); //the person to send too, uid adjusted to remove the google:
+                        params.put("username",mUsername); //from name
+                        params.put("senderUid", uid); //from uid full with google
+                        ParseCloud.callFunctionInBackground("acceptNotification", params, new FunctionCallback<String>() {
+                            @Override
+                            public void done(String result, ParseException e) {
+                                if (e == null) {
+                                    // result is "Hello world!"
+                                }
+                            }
+                        });
+
+
                         return true;
                     default:
                         return true;

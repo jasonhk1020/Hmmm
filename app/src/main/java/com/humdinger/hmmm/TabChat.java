@@ -276,6 +276,7 @@ public class TabChat extends BackHandledFragment {
         Bundle extras = intent.getExtras();
         if (extras != null) {
             Boolean isMessageNotification = extras.getBoolean("messageNotification");
+            Boolean isAcceptNotification = extras.getBoolean("acceptNotification");
             if (isMessageNotification) {
                 String senderUid = extras.getString("senderUid");
                 int position = mConnectionListAdapter.getPosition(senderUid);
@@ -288,6 +289,18 @@ public class TabChat extends BackHandledFragment {
                 //clear the intent
                 intent.removeExtra("senderUid");
                 intent.removeExtra("messageNotification");
+            } else if(isAcceptNotification) {
+                String senderUid = extras.getString("senderUid");
+                int position = mConnectionListAdapter.getPosition(senderUid);
+
+                //go to the chat!
+                if (position != -1) {
+                    mRecyclerView.findViewHolderForAdapterPosition(position).itemView.performClick();
+                }
+
+                //clear the intent
+                intent.removeExtra("senderUid");
+                intent.removeExtra("acceptNotification");
             }
 
         }

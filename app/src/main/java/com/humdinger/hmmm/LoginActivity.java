@@ -170,7 +170,7 @@ public class LoginActivity extends ActionBarActivity implements
                 if (resultCode == RESULT_OK) {
                     if (this.mAuthData != null) {
                         final ProgressDialog newDialog = new ProgressDialog(this);
-                        newDialog.setTitle("Loading");
+                        newDialog.setTitle("Logging Out");
                         newDialog.setCancelable(false);
                         newDialog.show();
 
