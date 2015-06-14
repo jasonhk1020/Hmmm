@@ -56,6 +56,8 @@ public class TabChat extends BackHandledFragment {
     private Query queryRef;
     private ChildEventListener queryRefListener;
     private View v;
+    private Query yourRef;
+    private ChildEventListener yourRefListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -104,7 +106,7 @@ public class TabChat extends BackHandledFragment {
     public void onStart() {
         super.onStart();
 
-        //query the connections ONLY if the child with your uid is set to true
+        //query the connections ONLY if the child with your uid is set to true.  If they say yes to you, then you will know.
         queryRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("connections").orderByChild(uid).equalTo(true);
         queryRefListener = queryRef.addChildEventListener(new ChildEventListener() {
             @Override
@@ -186,8 +188,85 @@ public class TabChat extends BackHandledFragment {
             public void onCancelled(FirebaseError firebaseError) {
             }
         });
+        //check your connections for new true values
+        yourRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("connections").child(uid).orderByValue().equalTo(true);
+        yourRefListener = yourRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot myConnection, String s) {
+                //check them if they said yes to you
+                Firebase theirRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("connections").child(myConnection.getKey());
+                theirRef.addListenerForSingleValueEvent(new CustomValueEventListener(myConnection.getKey()) {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.child(uid).exists()) {
+                            //make sure you said yes
+                            if (dataSnapshot.child(uid).getValue() == true) {
+                                //since you both said yes, let's make sure you have a room
+                                //just loop through all the rooms once
 
+                                //check if you two have room together
+                                Query roomRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("members");
+                                //look into all the rooms
+                                roomRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot rooms) {
+                                        boolean newRoom = true;
+                                        //loop through the rooms
+                                        for (DataSnapshot room : rooms.getChildren()) {
+                                            //if both of you are mentioned here (there are no other values but true, so yea!)
+                                            if (room.child(uid).exists() && room.child(getUid()).exists()) {
+                                                newRoom = false; //we don't need a new room anymore
+                                                String roomId = room.getKey(); //let's add the room to the adapter
+                                                mConnectionListItem = new ConnectionListItem(room.getKey(), getUid()); //create the list item
+                                                //if it's not already on the list, then add it
+                                                if (!mConnectionListAdapter.exists(mConnectionListItem)) {
+                                                    mConnectionListAdapter.addItem(mConnectionListItem);
+                                                }
+                                                break; //since we found it, no need to look elsewhere
+                                            }
+                                        }
 
+                                        //check if you need a new room
+                                        if (newRoom) {
+                                            //yes we do!
+                                            //add the people and room number to the members child
+                                            Map<String, Object> members = new HashMap<String, Object>();
+                                            members.put(uid, true);
+                                            members.put(getUid(), true);
+
+                                            //get the new room by pushing
+                                            memberRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("members");
+                                            Firebase newRoomRef = memberRef.push();
+                                            newRoomRef.setValue(members); //add the data to the new room
+                                            mConnectionListItem = new ConnectionListItem(newRoomRef.getKey(), getUid()); // pass the match user name and the room number both strings
+                                            mConnectionListAdapter.addItem(mConnectionListItem); // Add the item to the adapter
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(FirebaseError firebaseError) {
+                                    }
+                                });
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                    }
+                });
+            }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+            }
+        });
     }
 
     @Override
@@ -221,11 +300,14 @@ public class TabChat extends BackHandledFragment {
         super.onStop();
         //remove event listener
         queryRef.removeEventListener(queryRefListener);
+        yourRef.removeEventListener(yourRefListener);
 
         //remove the chatlist adapter since everytime you click the chat, a new listener will start, might as well stop them after each enter
         if (mConnectionListAdapter.getChatListAdapter() != null) {
             mConnectionListAdapter.getChatListAdapter().cleanup();
         }
+
+
 
     }
 

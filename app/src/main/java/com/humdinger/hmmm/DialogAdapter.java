@@ -2,6 +2,7 @@ package com.humdinger.hmmm;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -28,6 +29,8 @@ public final class DialogAdapter extends BaseAdapter {
 	private final Object mLock = new Object();
 	private ArrayList<DialogModel> mData;
     private View v;
+    private ConnectionListAdapter mConnectionListAdapter;
+    private RecyclerView mRecyclerView;
 
 	public DialogAdapter(Context context) {
 		this.mContext = context;
