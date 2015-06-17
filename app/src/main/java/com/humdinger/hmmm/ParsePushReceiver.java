@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
@@ -86,7 +87,49 @@ public class ParsePushReceiver extends ParsePushBroadcastReceiver {
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
 
-        mNotificationManager.notify(notificationId, mBuilder.build());
+        SharedPreferences statusPrefs = context.getSharedPreferences("statusPrefs", 0);
+        Boolean opened = statusPrefs.getBoolean("opened", false);
+        int position = statusPrefs.getInt("position", 0);
+        String whoUid = statusPrefs.getString("whoUid", "");
+
+        //check what type of notification this is
+        if (notificationId == ParseConstants.ID_REQUEST) {
+            //it's a match request
+            if (opened) {
+                //it's opened
+                if (position == 0) {
+                    //if it's on the match page, don't notify, because it should pop up automatically
+                } else {
+                    //since it's on a different page, still notify (in future there should be an in app drop down notification or something)
+                    mNotificationManager.notify(notificationId, mBuilder.build());
+                }
+            } else {
+                //since not opened, then create the notification so we can launch from there
+                mNotificationManager.notify(notificationId, mBuilder.build());
+            }
+        } else if (notificationId == ParseConstants.ID_ACCEPT) {
+            //it's a match accept, always show since we don't have an in-app dialog
+            mNotificationManager.notify(notificationId, mBuilder.build());
+
+        } else {
+            //it's a message
+            if (opened) {
+                //since it's opened
+                if (position != 1 || !whoUid.equals(senderUid)) {
+                    //since it's not in the chat page or the current user isn't chatting with this person...create the notification
+                    mNotificationManager.notify(notificationId, mBuilder.build());
+                } else {
+                    //don't notify, because we are already actively talking to this person
+                }
+
+            } else {
+                //since not opened, then create the notification so we can launch from there
+                mNotificationManager.notify(notificationId, mBuilder.build());
+            }
+
+        }
+
+
 
         /*
         //set default sound and vibrate

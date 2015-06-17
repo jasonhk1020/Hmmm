@@ -21,6 +21,9 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.parse.LogOutCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -92,9 +95,26 @@ public class TabProfile extends Fragment {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //log out by going back to login page
+
+                // Create the Firebase ref that is used for all authentication with Firebase
+                Firebase mFirebaseRef = new Firebase(getResources().getString(R.string.FIREBASE_URL));
+
+                //disconnect from firebase
+                mFirebaseRef.unauth();
+
+                //disconnect from parse
+                ParseUser.logOutInBackground(new LogOutCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                        }
+                    }
+                });
+
+
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
-                getActivity().setResult(getActivity().RESULT_OK, intent);
+                intent.putExtra("logout", true); //this will also help disconnect from google+ back in login
+                startActivity(intent);
                 getActivity().finish();
             }
         });

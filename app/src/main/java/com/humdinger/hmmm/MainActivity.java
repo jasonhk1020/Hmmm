@@ -54,6 +54,16 @@ public class MainActivity extends ActionBarActivity implements BackHandledFragme
         PushService.setDefaultPushCallback(this, MainActivity.class);
         ParseAnalytics.trackAppOpened(getIntent());
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        SharedPreferences statusPrefs = getSharedPreferences("statusPrefs", 0);
+        statusPrefs.edit().putBoolean("opened", false).commit();
+
+    }
+
     @Override
     protected void onNewIntent (Intent intent) {
         super.onNewIntent(intent);
@@ -64,6 +74,9 @@ public class MainActivity extends ActionBarActivity implements BackHandledFragme
     @Override
     protected void onResume() {
         super.onResume();
+
+        SharedPreferences statusPrefs = getSharedPreferences("statusPrefs", 0);
+        statusPrefs.edit().putBoolean("opened", true).commit();
 
         //get parse push intents (remember to keep this in on rsume or else, it wont get the intents from the notification)
         //DON"T PUT IT IN THE ONCREATE!
@@ -122,4 +135,6 @@ public class MainActivity extends ActionBarActivity implements BackHandledFragme
     public void setSelectedFragment(BackHandledFragment selectedFragment) {
         this.selectedFragment = selectedFragment;
     }
+
+
 }

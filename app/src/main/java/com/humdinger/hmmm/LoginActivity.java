@@ -30,7 +30,6 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.plus.Plus;
 import com.parse.FunctionCallback;
 import com.parse.LogInCallback;
-import com.parse.LogOutCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
@@ -82,6 +81,13 @@ public class LoginActivity extends ActionBarActivity implements
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .build();
 
+        Intent intent = getIntent();
+        if (intent.getBooleanExtra("logout", false)) {
+            //logout and forget user
+            mGoogleApiClient.connect();
+        }
+
+
         //show the google sign in button
         mGoogleLoginButton = (SignInButton) findViewById(R.id.login_with_google);
         mGoogleLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -104,10 +110,10 @@ public class LoginActivity extends ActionBarActivity implements
         mFirebaseRef = new Firebase(getResources().getString(R.string.FIREBASE_URL));
 
         /* Setup the progress dialog that is displayed later when authenticating with Firebase */
-        mAuthProgressDialog = new ProgressDialog(this);
-        mAuthProgressDialog.setTitle("Loading");
-        mAuthProgressDialog.setCancelable(false);
+        mAuthProgressDialog = new ProgressDialog(this, R.style.CustomAlertDialogStyle);
         mAuthProgressDialog.show();
+        mAuthProgressDialog.setCancelable(false);
+        mAuthProgressDialog.setContentView(R.layout.dialog_progress);
 
         mContext = this;
 
@@ -115,6 +121,7 @@ public class LoginActivity extends ActionBarActivity implements
             @Override
             public void onAuthStateChanged(AuthData authData) {
                 mAuthProgressDialog.hide();
+
                 //go to function that will determine what to do if user is logged in or logged out
                 setAuthenticatedUser(authData);
             }
@@ -128,8 +135,29 @@ public class LoginActivity extends ActionBarActivity implements
 
     @Override
     public void onConnected(final Bundle bundle) {
-        /* Connected with Google API, use this to authenticate with Firebase */
-        getGoogleOAuthTokenAndLogin();
+
+        //get intent from logout to finally disconnect from google
+        Intent intent = getIntent();
+        if (intent.getBooleanExtra("logout", false)) {
+
+            //since logout is true from button press, let's revoke default account access incase we want to switch users
+            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+            Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient)
+                    .setResultCallback(new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(Status status) {
+                            Log.e(TAG, "User access revoked!");
+                            mGoogleApiClient.disconnect(); //this might be redundant
+                        }
+                    });
+
+            //remove the intent so this doesn't get used up again
+            intent.removeExtra("logout");
+            intent.setAction("");
+        } else {
+            /* Connected with Google API, use this to authenticate with Firebase */
+            getGoogleOAuthTokenAndLogin();
+        }
     }
 
     @Override
@@ -163,48 +191,6 @@ public class LoginActivity extends ActionBarActivity implements
                 mGoogleIntentInProgress = false;
                 if (!mGoogleApiClient.isConnecting()) {
                     mGoogleApiClient.connect();
-                }
-                break;
-            case RC_GOOGLE_LOGOUT:
-
-                if (resultCode == RESULT_OK) {
-                    if (this.mAuthData != null) {
-                        final ProgressDialog newDialog = new ProgressDialog(this);
-                        newDialog.setTitle("Logging Out");
-                        newDialog.setCancelable(false);
-                        newDialog.show();
-
-                        //disconnect from firebase
-                        mFirebaseRef.unauth();
-
-                        //disconnect from google
-                        if (this.mAuthData.getProvider().equals("google")) {
-                            if (mGoogleApiClient.isConnected()) {
-                                //logout and forget user
-                                Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-                                Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient)
-                                        .setResultCallback(new ResultCallback<Status>() {
-                                            @Override
-                                            public void onResult(Status status) {
-                                                Log.e(TAG, "User access revoked!");
-                                                mGoogleApiClient.disconnect(); //this might be redundant
-
-                                                //disconnect from parse
-                                                ParseUser.logOutInBackground(new LogOutCallback() {
-                                                    @Override
-                                                    public void done(ParseException e) {
-                                                        if (e == null) {
-                                                            newDialog.hide();
-                                                        }
-                                                    }
-                                                });
-                                            }
-                                        });
-                            }
-                        }
-                    }
-                } else {
-                    mGoogleLoginClicked = true;
                 }
                 break;
         }
@@ -371,30 +357,11 @@ public class LoginActivity extends ActionBarActivity implements
                     public void onCancelled(FirebaseError firebaseError) {
                     }
                 });
-/*
 
-                //get parse push intents (remember to keep this in on rsume or else, it wont get the intents from the notification)
-                //DON"T PUT IT IN THE ONCREATE!
-                Intent intent = getIntent();
-                Bundle extras = intent.getExtras();
-                if (extras != null) {
-                    Boolean isNotification = extras.getBoolean("messageNotification");
-                    if (isNotification) {
-                        //otherwise,
-                        intent.setClass(mContext, MainActivity.class); //redirect the intent
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                        startActivityForResult(intent, RC_GOOGLE_LOGOUT);
-                    }
-                }
-
-*/
-                //else {
-                //there's no data, so this means it's the very first time
-                    Intent intent = new Intent(mContext, MainActivity.class); //create a new intent
-                    startActivityForResult(intent, RC_GOOGLE_LOGOUT);
-                //}
-
-
+                Intent intent = new Intent(mContext, MainActivity.class); //create a new intent
+                startActivity(intent);
+                finish();
+                //startActivityForResult(intent, RC_GOOGLE_LOGOUT);
 
             } else {
                 Log.e(TAG, "Invalid provider: " + authData.getProvider());

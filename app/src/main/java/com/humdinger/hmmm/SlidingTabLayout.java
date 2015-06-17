@@ -30,6 +30,7 @@ package com.humdinger.hmmm;
  * limitations under the License.
  */
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -318,6 +319,16 @@ public class SlidingTabLayout extends HorizontalScrollView {
             }
             if (mViewPagerPageChangeListener != null) {
                 mViewPagerPageChangeListener.onPageSelected(position);
+            }
+
+            //save the page state
+            SharedPreferences statusPrefs = getContext().getSharedPreferences("statusPrefs",0);
+            statusPrefs.edit().putInt("position", position).commit();
+
+            //if not chat page, we dont have a current chat window up so set it to blank for notifications
+            if (position != 1){
+                //reset the status for message notifications
+                statusPrefs.edit().putString("whoUid", "").commit();
             }
         }
 

@@ -61,12 +61,12 @@ public class TabChat extends BackHandledFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.tab_chat,container,false);
+        v = inflater.inflate(R.layout.tab_chat, container, false);
 
         //get user info
-        SharedPreferences prefs = getActivity().getSharedPreferences("userPrefs", 0);
-        mUsername = prefs.getString("username", null);
-        uid = prefs.getString("uid", null);
+        SharedPreferences userPrefs = getActivity().getSharedPreferences("userPrefs", 0);
+        mUsername = userPrefs.getString("username", null);
+        uid = userPrefs.getString("uid", null);
 
         // establish recycler view
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
@@ -317,6 +317,11 @@ public class TabChat extends BackHandledFragment {
 
         //disconnect listeners and discard arraylists
         mConnectionListAdapter.cleanup();
+
+        //reset the status for message notifications, this is edge case if we decide to hide the app
+        SharedPreferences statusPrefs = getActivity().getSharedPreferences("statusPrefs", 0);
+        statusPrefs.edit().putString("whoUid", "").commit();
+
     }
 
     @Override
@@ -330,6 +335,10 @@ public class TabChat extends BackHandledFragment {
             // go back to the the match activity by letting activity handle it
             return false;
         } else {
+            //reset the status for message notifications, edge case for pressing back button out of the chat window
+            SharedPreferences statusPrefs = getActivity().getSharedPreferences("statusPrefs", 0);
+            statusPrefs.edit().putString("whoUid", "").commit();
+
             setInvisible(true); //now show the match list display
             return true;
         }

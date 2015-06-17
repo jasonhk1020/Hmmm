@@ -30,6 +30,7 @@ import com.firebase.client.ValueEventListener;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -82,6 +83,10 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                 ConnectionListItem connectionListItem = mConnectionListItems.get(mPosition);
                 String mRoom = connectionListItem.getRoom();
                 final String matchUid = connectionListItem.getMatchUid();
+
+                //set the statuspreferences on click
+                SharedPreferences statusPrefs = mContext.getSharedPreferences("statusPrefs", 0);
+                statusPrefs.edit().putString("whoUid", matchUid).commit();
 
                 //set the chat room and attach to adapter
                 roomRef = new Firebase(mContext.getResources().getString(R.string.FIREBASE_URL)).child("chat").child(mRoom);
@@ -324,7 +329,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
         }
 
         public void setImage(String photoUrl) {
-            new LoadProfileImage(imageView).execute(photoUrl);
+            Picasso.with(mContext).load(photoUrl).fit().into(imageView);
         }
 
         public void setMessage(String author, String message) {
