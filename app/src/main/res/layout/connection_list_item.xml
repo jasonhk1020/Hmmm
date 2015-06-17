@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/image_connection"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/profile_padding"/>
@@ -32,7 +32,11 @@
             android:layout_toRightOf="@+id/image_connection"
             android:layout_alignParentTop="true"
             android:lines="1"
-            android:textColor="@color/textColorDark"/>
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/textColorDark"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/info_connection"
@@ -41,7 +45,35 @@
             android:textSize="12sp"
             android:layout_toRightOf="@+id/image_connection"
             android:layout_below="@+id/username_connection"
-            android:lines="2"/>
+            android:lines="2"
+            android:ellipsize="end"
+            android:maxLines="2"/>
+
+        <TextView
+            android:id="@+id/message_connection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_toRightOf="@+id/image_connection"
+            android:layout_toLeftOf="@+id/timestamp_connection"
+            android:layout_below="@+id/info_connection"
+            android:lines="1"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/grey"/>
+
+        <TextView
+            android:id="@+id/timestamp_connection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/info_connection"
+            android:lines="1"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:textColor="@color/grey"/>
 
         </RelativeLayout>
 

@@ -21,15 +21,20 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -39,17 +44,23 @@ import java.util.HashMap;
 public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAdapter.ViewHolder> {
     private Context mContext;
     private String mUsername;
-    private RecyclerView mRecyclerView;
-    private ArrayList<ConnectionListItem> mConnectionListItems = new ArrayList<ConnectionListItem>();
-    private Firebase roomRef;
-    private ChatListAdapter mChatListAdapter;
 
+    private RecyclerView mRecyclerView;
     private ListView chatView;
     private EditText inputText;
     private ImageButton inputButton;
     private RelativeLayout messageBar;
     private TextView matchText;
-    private Firebase matchRef;
+
+    private Firebase roomRef;
+    private ChatListAdapter mChatListAdapter;
+
+    private ArrayList<Query> mQueryMessageRefs = new ArrayList<Query>();
+    private ArrayList<Firebase> mMatchRefs = new ArrayList<Firebase>();
+    private ArrayList<ConnectionListItem> mConnectionListItems = new ArrayList<ConnectionListItem>();
+    private ArrayList<ValueEventListener> mMatchRefListeners = new ArrayList<ValueEventListener>();
+    private ArrayList<ChildEventListener> mQueryMessageRefListeners = new ArrayList<ChildEventListener>();
+    private ArrayList<ChatListAdapter> mChatListAdapters = new ArrayList<ChatListAdapter>();
 
     public ConnectionListAdapter(Context context, RecyclerView recyclerView, String mUsername) {
         this.mContext = context;
@@ -74,10 +85,11 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
 
                 //set the chat room and attach to adapter
                 roomRef = new Firebase(mContext.getResources().getString(R.string.FIREBASE_URL)).child("chat").child(mRoom);
-                mChatListAdapter = new ChatListAdapter(roomRef, ((Activity)mContext), R.layout.chat_message, mUsername);
+                mChatListAdapter = new ChatListAdapter(roomRef, ((Activity) mContext), R.layout.chat_message, mUsername);
+                mChatListAdapters.add(0, mChatListAdapter);
 
                 //fill the chatview
-                chatView = (ListView) ((Activity)mContext).findViewById(R.id.chatView);
+                chatView = (ListView) ((Activity) mContext).findViewById(R.id.chatView);
                 chatView.setAdapter(mChatListAdapter);
                 mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
                     @Override
@@ -88,12 +100,12 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                 });
 
                 //setup the match text
-                matchText = (TextView) ((Activity)mContext).findViewById(R.id.chat_matchUsername);
+                matchText = (TextView) ((Activity) mContext).findViewById(R.id.chat_matchUsername);
 
                 //need to ask firebase for the match's username!
-                matchRef = new Firebase(mContext.getResources().getString(R.string.FIREBASE_URL)).child("users").child(connectionListItem.getMatchUid()).child("username");
+                Firebase tempRef = new Firebase(mContext.getResources().getString(R.string.FIREBASE_URL)).child("users").child(connectionListItem.getMatchUid()).child("username");
                 //just once
-                matchRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                tempRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         //setup the match username display
@@ -108,23 +120,23 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
 
 
                 //set the message bar layout for the buttons
-                messageBar = (RelativeLayout) ((Activity)mContext).findViewById(R.id.messageBar);
+                messageBar = (RelativeLayout) ((Activity) mContext).findViewById(R.id.messageBar);
 
                 //setup the buttons and text input
-                inputButton = (ImageButton) ((Activity)mContext).findViewById(R.id.sendButton);
+                inputButton = (ImageButton) ((Activity) mContext).findViewById(R.id.sendButton);
                 inputButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         sendMessage(matchUid);
                     }
                 });
-                inputText = (EditText) ((Activity)mContext).findViewById(R.id.messageInput);
+                inputText = (EditText) ((Activity) mContext).findViewById(R.id.messageInput);
                 inputText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                         if (keyEvent != null && (keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
                             InputMethodManager inputMethodManager = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-                            inputMethodManager.hideSoftInputFromWindow(inputText.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+                            inputMethodManager.hideSoftInputFromWindow(inputText.getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                         }
                         return true;
                     }
@@ -146,7 +158,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
 
         v.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public boolean onLongClick(View v){
+            public boolean onLongClick(View v) {
                 return true;
             }
         });
@@ -159,7 +171,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
         ConnectionListItem connectionListItem = mConnectionListItems.get(i);
 
         Firebase matchRef = new Firebase(mContext.getResources().getString(R.string.FIREBASE_URL)).child("users").child(connectionListItem.getMatchUid());
-        matchRef.addValueEventListener(new ValueEventListener() {
+        ValueEventListener matchRefListener = matchRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -214,6 +226,53 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
 
             }
         });
+
+
+        Firebase messageRef = new Firebase(mContext.getResources().getString(R.string.FIREBASE_URL)).child("chat").child(connectionListItem.getRoom());
+        Query queryMessageRef = messageRef.limitToLast(1);
+        ChildEventListener queryMessageRefListener = queryMessageRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Chat chat = dataSnapshot.getValue(Chat.class);
+                String author = chat.getAuthor();
+                String message = chat.getMessage();
+                Long timestamp = chat.getTimestamp();
+
+                if (timestamp != null) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, h:mm a");
+                    sdf.setTimeZone(Calendar.getInstance().getTimeZone());
+                    viewHolder.setTimestamp(sdf.format(new Date(timestamp)));
+                }
+
+                if (author.equals(mUsername)) {
+                    message = "You: " + message;
+                }
+                viewHolder.setMessage(author, message);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+            }
+        });
+
+        //add listener to list so we can retrieve it later and stop it
+        mMatchRefs.add(i, matchRef);
+        mMatchRefListeners.add(i, matchRefListener);
+
+        mQueryMessageRefs.add(i, queryMessageRef);
+        mQueryMessageRefListeners.add(i, queryMessageRefListener);
     }
 
 
@@ -245,12 +304,16 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
         private TextView usernameText;
         private TextView infoText;
         private ImageView imageView;
+        private TextView messageText;
+        private TextView timestampText;
 
         public ViewHolder(View itemView) {
             super(itemView);
             usernameText = (TextView) itemView.findViewById(R.id.username_connection);
             infoText = (TextView) itemView.findViewById(R.id.info_connection);
             imageView = (ImageView) itemView.findViewById(R.id.image_connection);
+            messageText = (TextView) itemView.findViewById(R.id.message_connection);
+            timestampText = (TextView) itemView.findViewById(R.id.timestamp_connection);
 
         }
 
@@ -263,6 +326,12 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
         public void setImage(String photoUrl) {
             new LoadProfileImage(imageView).execute(photoUrl);
         }
+
+        public void setMessage(String author, String message) {
+            this.messageText.setText(message);
+        }
+
+        public void setTimestamp(String timestamp) { this.timestampText.setText(timestamp); }
     }
 
     public void addItem(ConnectionListItem item) {
@@ -275,8 +344,8 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
         notifyItemRemoved(position);
     }
 
-    public ChatListAdapter getChatListAdapter() {
-        return this.mChatListAdapter;
+    public ArrayList<ChatListAdapter> getChatListAdapters() {
+        return this.mChatListAdapters;
     }
 
     public ArrayList<ConnectionListItem> getList() {
@@ -343,6 +412,23 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
             }
         }
         return found;
+    }
+
+    public void cleanup() {
+        for (ChatListAdapter chatListAdapter : mChatListAdapters) {
+            chatListAdapter.cleanup();
+        }
+        for (int i = 0 ; i < mMatchRefs.size() ; i++) {
+            mMatchRefs.get(i).removeEventListener(mMatchRefListeners.get(i));
+        }
+        for(int i = 0 ; i < mQueryMessageRefs.size() ; i++) {
+            mQueryMessageRefs.get(i).removeEventListener(mQueryMessageRefListeners.get(i));
+        }
+        mChatListAdapters.clear();
+        mQueryMessageRefListeners.clear();
+        mQueryMessageRefs.clear();
+        mMatchRefListeners.clear();
+        mMatchRefs.clear();
     }
 
 }

@@ -315,13 +315,8 @@ public class TabChat extends BackHandledFragment {
         queryRef.removeEventListener(queryRefListener);
         yourRef.removeEventListener(yourRefListener);
 
-        //remove the chatlist adapter since everytime you click the chat, a new listener will start, might as well stop them after each enter
-        if (mConnectionListAdapter.getChatListAdapter() != null) {
-            mConnectionListAdapter.getChatListAdapter().cleanup();
-        }
-
-
-
+        //disconnect listeners and discard arraylists
+        mConnectionListAdapter.cleanup();
     }
 
     @Override

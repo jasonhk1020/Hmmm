@@ -8,6 +8,10 @@ import android.widget.TextView;
 
 import com.firebase.client.Query;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * @author greg
  * @since 6/21/13
@@ -37,27 +41,40 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
     protected void populateView(View view, Chat chat) {
         // Map a Chat object to an entry in our listview
         String author = chat.getAuthor();
+        Long timestamp = chat.getTimestamp();
         TextView messageText = (TextView) view.findViewById(R.id.message);
-        LinearLayout wrapper = (LinearLayout) view.findViewById(R.id.wrapper);
+        TextView timestampText = (TextView) view.findViewById(R.id.timestamp);
+        LinearLayout innerWrapper = (LinearLayout) view.findViewById(R.id.innerWrapper);
+        LinearLayout outerWrapper = (LinearLayout) view.findViewById(R.id.outerWrapper);
         float scale = view.getResources().getDisplayMetrics().density;
 
         // If the message was sent by this user, color it differently
         if (author != null && author.equals(mUsername)) {
             //this is you
             messageText.setTextColor(view.getResources().getColor(R.color.textColorPrimary));
-            messageText.setBackgroundResource(R.drawable.chatbubble_right);
-            messageText.setPadding((int) (8*scale +0.5f),(int) (8*scale +0.5f),(int) (8*scale +5.5f),(int) (8*scale +0.5f)); //add 5 pixels more for right because of the triangle
-            wrapper.setGravity(Gravity.RIGHT);
+            messageText.setPadding((int) (8 * scale + 0.5f), (int) (8 * scale + 0.5f), (int) (8 * scale + 5.5f), 0); //add 5 pixels more for right because of the triangle
+            innerWrapper.setBackgroundResource(R.drawable.chatbubble_right);
+            outerWrapper.setGravity(Gravity.RIGHT);
 
         } else {
             //this is others
             messageText.setTextColor(view.getResources().getColor(R.color.colorPrimaryDark));
-            messageText.setBackgroundResource(R.drawable.chatbubble_left);
-            messageText.setPadding((int) (8*scale +5.5f),(int) (8*scale +0.5f),(int) (8*scale +0.5f),(int) (8*scale +0.5f)); //add 5 pixels more for left because of the triangle
-            wrapper.setGravity(Gravity.LEFT);
+            messageText.setPadding((int) (8 * scale + 5.5f), (int) (8 * scale + 0.5f), (int) (8 * scale + 0.5f), 0); //add 5 pixels more for left because of the triangle
+            innerWrapper.setBackgroundResource(R.drawable.chatbubble_left);
+            outerWrapper.setGravity(Gravity.LEFT);
+        }
+
+        if (timestamp != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, h:mm a");
+            sdf.setTimeZone(Calendar.getInstance().getTimeZone());
+            timestampText.setText(sdf.format(new Date(timestamp)));
+            if (author.equals(mUsername)) {
+                timestampText.setPadding((int) (8 * scale + 0.5f), 0, (int) (8 * scale + 5.5f), (int) (8 * scale + 0.5f)); //add 5 pixels more for right because of the triangle
+            } else {
+                timestampText.setPadding((int) (8 * scale + 5.5f), 0, (int) (8 * scale + 0.5f), (int) (8 * scale + 0.5f)); //add 5 pixels more for left because of the triangle
+            }
         }
         messageText.setText(chat.getMessage());
-
 
     }
 

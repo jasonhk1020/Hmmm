@@ -54,4 +54,5 @@ public class ConnectionListItem implements Serializable{
     public String getMatchUid() {
         return matchUid;
     }
+
 }
