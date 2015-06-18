@@ -244,6 +244,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
         if (mGestureDetector.onTouchEvent(event)) {
             return true;
         }
+
         //Log.d("Touch Event", MotionEvent.actionToString(event.getActionMasked()) + " ");
         final int pointerIndex;
         final float x, y;
@@ -338,6 +339,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
         if (mGestureDetector.onTouchEvent(event)) {
             return true;
         }
+
         final int pointerIndex;
         final float x, y;
         final float dx, dy;

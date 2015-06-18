@@ -51,7 +51,7 @@ import android.widget.TextView;
  * <p>
  * To use the component, simply add it to your view hierarchy. Then in your
  * {@link android.app.Activity} or {@link android.support.v4.app.Fragment} call
- * {@link #setViewPager(android.support.v4.view.ViewPager)} providing it the ViewPager this layout is being used for.
+ *  providing it the ViewPager this layout is being used for.
  * <p>
  * The colors can be customized in two ways. The first and simplest is to provide an array of colors
  * via {@link #setSelectedIndicatorColors(int...)}. The
@@ -85,7 +85,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
     private int mTabViewTextViewId;
     private boolean mDistributeEvenly;
 
-    private ViewPager mViewPager;
+    private CustomViewPager mViewPager;
     private SparseArray<String> mContentDescriptions = new SparseArray<String>();
     private ViewPager.OnPageChangeListener mViewPagerPageChangeListener;
 
@@ -162,7 +162,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
      * Sets the associated view pager. Note that the assumption here is that the pager content
      * (number of tabs and tab titles) does not change after this call has been made.
      */
-    public void setViewPager(ViewPager viewPager) {
+    public void setViewPager(CustomViewPager viewPager) {
         mTabStrip.removeAllViews();
 
         mViewPager = viewPager;
@@ -321,6 +321,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 mViewPagerPageChangeListener.onPageSelected(position);
             }
 
+
             //save the page state
             SharedPreferences statusPrefs = getContext().getSharedPreferences("statusPrefs",0);
             statusPrefs.edit().putInt("position", position).commit();
@@ -329,6 +330,12 @@ public class SlidingTabLayout extends HorizontalScrollView {
             if (position != 1){
                 //reset the status for message notifications
                 statusPrefs.edit().putString("whoUid", "").commit();
+            }
+
+            if (position == 0) {
+                mViewPager.setPagingEnabled(false);
+            } else {
+                mViewPager.setPagingEnabled(true);
             }
         }
 
