@@ -50,7 +50,7 @@ public class TabMatch extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.tab_match,container,false);
+        v = inflater.inflate(R.layout.tab_match, container, false);
 
         //get the user shared preferences
         prefs = getActivity().getSharedPreferences("userPrefs", 0);
@@ -66,7 +66,7 @@ public class TabMatch extends Fragment {
         mCardContainer.bringToFront();
         textView.invalidate();
 
-        //create card container for diaglos
+        //create card container for dialogs
         mDialogContainer = (CardContainer) v.findViewById(R.id.match_dialog_layout);
         mDialogContainer.setOrientation(Orientations.Orientation.Ordered);
         mDialogContainer.bringToFront();
@@ -78,7 +78,7 @@ public class TabMatch extends Fragment {
         dialogAdapter = new DialogAdapter(getActivity(), v);
 
         //set adapters to the view
-        mCardContainer.setAdapter(adapter);
+
         mDialogContainer.setAdapter(dialogAdapter);
 
 
@@ -92,28 +92,46 @@ public class TabMatch extends Fragment {
                 switch (menuItem.getItemId()) {
                     case R.id.action_match_previous:
                         if(!adapter.isEmpty()) {
-                            //get the bottom card
-                            card = adapter.getCardModel(adapter.getCount() - 1);
-                            //move card to top
-                            adapter.moveToTop(card);
+                            if (adapter.getCount() > 1) {
+                                //get the bottom card
+                                card = adapter.getCardModel(adapter.getCount() - 1);
+
+                                //move card to top
+                                adapter.moveToTop(card);
+                                mCardContainer.setAdapter(adapter);
+                            } else if (adapter.getCount() == 1) {
+                                Toast.makeText(getActivity(),"One lonely Humdinger. Invite your network!!",Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getActivity(),"No new Humdingers. Invite your network!",Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                         return true;
                     case R.id.action_match_cancel:
                         if(!adapter.isEmpty()) {
-                            //get the top card
-                            card = adapter.getCardModel(0);
-                            //remove it from the adapter view
-                            adapter.remove(card);
-                            //then add to back of stack
-                            adapter.add(card);
+                            if (adapter.getCount() > 1) {
+                                //get the top card
+                                card = adapter.getCardModel(0);
+                                //remove it from the adapter view
+                                adapter.remove(card);
+                                //then add to back of stack
+                                adapter.add(card);
+                                mCardContainer.setAdapter(adapter);
+                            } else if (adapter.getCount() == 1) {
+                                Toast.makeText(getActivity(),"One lonely Humdinger. Invite your network!!",Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getActivity(),"No new Humdingers. Invite your network!",Toast.LENGTH_SHORT).show();
+                            }
                         }
                         return true;
                     case R.id.action_match_accept:
                         if(!adapter.isEmpty()) {
                             //get the top card
                             card = adapter.getCardModel(0);
+
                             //remove it from the adapter view completely
                             adapter.remove(card);
+                            mCardContainer.setAdapter(adapter);
                             //add them to your connections list
                             Map<String, Object> map = new HashMap<String, Object>();
                             map.put(card.getUid(), true);
@@ -136,10 +154,12 @@ public class TabMatch extends Fragment {
                                     }
                                 }
                             });
+                        } else {
+                            Toast.makeText(getActivity(),"No new Humdingers. Invite your network!",Toast.LENGTH_SHORT).show();
                         }
                         return true;
                     case R.id.action_match_settings:
-                        Toast.makeText(getActivity(),"The settings menu is currently disabled.  We'll add search and filtering capability once there are enough users.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(),"We'll add search and filtering once there are enough Humdingers.",Toast.LENGTH_SHORT).show();
                         return true;
                     default:
                         return true;
@@ -193,6 +213,49 @@ public class TabMatch extends Fragment {
                                                         (CharSequence) map.get("info"),
                                                         (String) map.get("description"),
                                                         (String) map.get("photoUrl"));
+                                                cardModel.setOnCardDismissedListener(new CardModel.OnCardDismissedListener() {
+
+                                                    @Override
+                                                    public void onLike() {
+                                                        CardModel tempCard = adapter.getCardModel(0);
+
+
+                                                        Map<String, Object> map = new HashMap<String, Object>();
+                                                        map.put(tempCard.getUid(), true);
+
+                                                        Firebase myRef = new Firebase(getResources().getString(R.string.FIREBASE_URL)).child("connections").child(uid);
+                                                        myRef.updateChildren(map);
+
+                                                        //also send them a notification
+                                                        //send data to parse
+                                                        String fixedMatchUid = tempCard.getUid().replace("google:","");
+                                                        HashMap<String, Object> params = new HashMap<String, Object>();
+                                                        params.put("uid",fixedMatchUid); //the person to send too, uid adjusted to remove the google:
+                                                        params.put("username",mUsername); //from name
+                                                        params.put("senderUid", uid); //from uid full with google
+                                                        ParseCloud.callFunctionInBackground("requestNotification", params, new FunctionCallback<String>() {
+                                                            @Override
+                                                            public void done(String result, ParseException e) {
+                                                                if (e == null) {
+                                                                    // result is "Hello world!"
+                                                                }
+                                                            }
+                                                        });
+
+                                                        adapter.remove(tempCard);
+                                                        mCardContainer.setAdapter(adapter);
+                                                    }
+
+                                                    @Override
+                                                    public void onDislike() {
+                                                        CardModel tempCard = adapter.getCardModel(0);
+                                                        //remove it from the adapter view
+                                                        adapter.remove(tempCard);
+                                                        //then add to back of stack
+                                                        adapter.add(tempCard);
+                                                        mCardContainer.setAdapter(adapter);
+                                                    }
+                                                });
 
                                                 //check if the item already exists in the adapter, if not let's add it\
                                                 if(!adapter.exists(snapshot.getKey())) {
@@ -209,6 +272,7 @@ public class TabMatch extends Fragment {
                                                             } else {
                                                                 //since neither of you mention each other add the potential new match!
                                                                 adapter.add(cardModel);
+                                                                mCardContainer.setAdapter(adapter);
                                                             }
                                                         }
                                                         @Override
@@ -381,6 +445,7 @@ public class TabMatch extends Fragment {
                                                                     //also remove them from your match list if they are still on it.
                                                                     if (adapter.exists(dialogModel.getMatchUid())){
                                                                         adapter.remove(dialogModel.getMatchUid());
+                                                                        mCardContainer.setAdapter(adapter);
                                                                     }
 
                                                                 }

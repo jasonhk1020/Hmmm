@@ -31,8 +31,6 @@ public final class SimpleCardStackAdapter extends CardStackAdapter {
 
         if(model.getUid() != null) {
             //set the contents of the view
-            //new LoadProfileImage(imageView).execute(model.getPhotoUrl());
-
             Picasso.with(getContext()).load(model.getPhotoUrl()).fit().into(imageView);
             usernameView.setText(model.getUsername());
             positionCompanyIndustryView.setText(model.getInfo());
