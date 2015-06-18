@@ -315,13 +315,20 @@ public class TabChat extends BackHandledFragment {
         queryRef.removeEventListener(queryRefListener);
         yourRef.removeEventListener(yourRefListener);
 
-        //disconnect listeners and discard arraylists
-        mConnectionListAdapter.cleanup();
+
 
         //reset the status for message notifications, this is edge case if we decide to hide the app
         SharedPreferences statusPrefs = getActivity().getSharedPreferences("statusPrefs", 0);
         statusPrefs.edit().putString("whoUid", "").commit();
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        //disconnect listeners and discard arraylists
+        mConnectionListAdapter.cleanup();
     }
 
     @Override

@@ -43,15 +43,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="223bd0e0-e190-46a4-b5c7-30d07bc976cd" name="Default" comment="">
-      <change type="MOVED" beforePath="C:\Users\jasonhk1020\Documents\GitHub\Hmmm\app\src\main\res\drawable\rounded_corner_small_white.xml" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/rounded_corner_white.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/cache.properties.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileHashes.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileSnapshots.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/taskArtifacts.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/CardStackAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/CardStackAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/SimpleCardStackAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/SimpleCardStackAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/TabMatch.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/TabMatch.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/std_card_inner.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/std_card_inner.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/TabChat.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/TabChat.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Hmmm.iws" />
@@ -101,11 +97,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="SlidingTabLayout.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/SlidingTabLayout.java">
+      <file leaf-file-name="TabChat.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/TabChat.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.7075307">
+              <caret line="240" column="7" selection-start-line="240" selection-start-column="7" selection-end-line="240" selection-end-column="7" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ParsePushReceiver.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/ParsePushReceiver.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="339" column="0" selection-start-line="339" selection-start-column="0" selection-end-line="339" selection-end-column="0" />
+              <caret line="37" column="71" selection-start-line="37" selection-start-column="71" selection-end-line="37" selection-end-column="71" />
               <folding />
             </state>
           </provider>
@@ -123,12 +129,34 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/MainActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="90" column="36" selection-start-line="90" selection-start-column="22" selection-end-line="90" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="CardModel.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/CardModel.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="105" column="38" selection-start-line="105" selection-start-column="38" selection-end-line="105" selection-end-column="38" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ConnectionListAdapter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/ConnectionListAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="81.72414">
+              <caret line="240" column="0" selection-start-line="240" selection-start-column="0" selection-end-line="240" selection-end-column="0" />
+              <folding>
+                <element signature="e#7677#7733#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -143,11 +171,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TabMatch.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TabMatch.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/TabMatch.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.5085106">
-              <caret line="219" column="74" selection-start-line="219" selection-start-column="66" selection-end-line="219" selection-end-column="74" />
+            <state vertical-scroll-proportion="-1.5517242">
+              <caret line="294" column="64" selection-start-line="294" selection-start-column="64" selection-end-line="294" selection-end-column="64" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#2958#7554#0" expanded="true" />
@@ -1849,13 +1877,13 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/ConnectionListAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/SlidingTabLayout.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/TabChat.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/ParsePushReceiver.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/rounded_corner_small_white.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/CardStackAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/std_card_inner.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/SimpleCardStackAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/TabMatch.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/TabChat.java" />
       </list>
     </option>
   </component>
@@ -2111,7 +2139,7 @@
     <property name="recentsLimit" value="5" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="OverrideImplement.overriding.sorted" value="false" />
-    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="42f7ee062d729fe1" />
+    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="TA98905RAY" />
     <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Swipeable-Cards-master" />
     <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager2.WIDTH" value="243" />
     <property name="FullScreen" value="false" />
@@ -2475,15 +2503,15 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20951302" sideWeight="0.19689119" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3295583" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977968" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.403171" sideWeight="0.41397154" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.403171" sideWeight="0.41397154" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43601358" sideWeight="0.8031088" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32555556" sideWeight="0.4924875" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24334899" sideWeight="0.4924875" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21857305" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32777777" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3304" sideWeight="0.50056624" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3216308" sideWeight="0.2177264" order="3" side_tool="false" content_ui="tabs" x="925" y="57" width="984" height="911" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3216308" sideWeight="0.2177264" order="3" side_tool="false" content_ui="tabs" x="925" y="57" width="984" height="911" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -2574,11 +2602,47 @@
           <properties />
           <option name="timeStamp" value="922" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/ConnectionListAdapter.java</url>
+          <line>177</line>
+          <properties />
+          <option name="timeStamp" value="1102" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/ConnectionListAdapter.java</url>
+          <line>422</line>
+          <properties />
+          <option name="timeStamp" value="1104" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/TabChat.java</url>
+          <line>63</line>
+          <properties />
+          <option name="timeStamp" value="1105" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/TabChat.java</url>
+          <line>327</line>
+          <properties />
+          <option name="timeStamp" value="1108" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/TabChat.java</url>
+          <line>312</line>
+          <properties />
+          <option name="timeStamp" value="1109" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/TabChat.java</url>
+          <line>106</line>
+          <properties />
+          <option name="timeStamp" value="1110" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="1102" />
+      <option name="time" value="1111" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -2587,6 +2651,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="10" column="46" selection-start-line="10" selection-start-column="46" selection-end-line="10" selection-end-column="46" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2617,6 +2682,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33801168">
           <caret line="69" column="22" selection-start-line="69" selection-start-column="22" selection-end-line="69" selection-end-column="22" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2651,22 +2717,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/ParsePushReceiver.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="37" column="71" selection-start-line="37" selection-start-column="71" selection-end-line="37" selection-end-column="71" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="96" column="29" selection-start-line="96" selection-start-column="29" selection-end-line="96" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/Match.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2692,14 +2742,6 @@
       </provider>
       <provider selected="true" editor-type-id="ninepatcheditor">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/TabChat.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="356" column="37" selection-start-line="356" selection-start-column="31" selection-end-line="356" selection-end-column="37" />
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/BaseCardStackAdapter.java">
@@ -2854,14 +2896,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/ConnectionListAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.0859232">
-          <caret line="81" column="0" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/ViewPagerAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.43510056">
@@ -2958,36 +2992,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/SlidingTabLayout.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="339" column="0" selection-start-line="339" selection-start-column="0" selection-end-line="339" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/CardContainer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-76.55173">
-          <caret line="316" column="54" selection-start-line="316" selection-start-column="54" selection-end-line="316" selection-end-column="54" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/CardStackAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/CardModel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="105" column="38" selection-start-line="105" selection-start-column="38" selection-end-line="105" selection-end-column="38" />
           <folding />
         </state>
       </provider>
@@ -3002,8 +3010,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/TabMatch.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.5085106">
-          <caret line="219" column="74" selection-start-line="219" selection-start-column="66" selection-end-line="219" selection-end-column="74" />
+        <state vertical-scroll-proportion="-1.5517242">
+          <caret line="294" column="64" selection-start-line="294" selection-start-column="64" selection-end-line="294" selection-end-column="64" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#2958#7554#0" expanded="true" />
@@ -3022,6 +3030,66 @@
             <element signature="e#25628#25675#0" expanded="true" />
             <element signature="e#27565#27612#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/SlidingTabLayout.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="3.486865">
+          <caret line="339" column="0" selection-start-line="339" selection-start-column="0" selection-end-line="339" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/ConnectionListAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="81.72414">
+          <caret line="240" column="0" selection-start-line="240" selection-start-column="0" selection-end-line="240" selection-end-column="0" />
+          <folding>
+            <element signature="e#7677#7733#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/CardModel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="105" column="38" selection-start-line="105" selection-start-column="38" selection-end-line="105" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/CardContainer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-76.55173">
+          <caret line="316" column="54" selection-start-line="316" selection-start-column="54" selection-end-line="316" selection-end-column="54" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/ParsePushReceiver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="37" column="71" selection-start-line="37" selection-start-column="71" selection-end-line="37" selection-end-column="71" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="90" column="36" selection-start-line="90" selection-start-column="22" selection-end-line="90" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/humdinger/hmmm/TabChat.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7075307">
+          <caret line="240" column="7" selection-start-line="240" selection-start-column="7" selection-end-line="240" selection-end-column="7" />
+          <folding />
         </state>
       </provider>
     </entry>
